@@ -1,0 +1,18 @@
+{
+  "languages": [
+    "English",
+    "Arabic",
+    "Turkish",
+    "Russian",
+    "French",
+    "Chinese",
+    "Germany"
+  ],
+  "currencies": [
+    { "code": "USD", "name": "United States" },
+    { "code": "GBP", "name": "United Kingdom" },
+    { "code": "SAR", "name": "Saudi Arabia" },
+    { "code": "EUR", "name": "European Union" },
+    { "code": "NGN", "name": "Nigeria" }
+  ]
+}
