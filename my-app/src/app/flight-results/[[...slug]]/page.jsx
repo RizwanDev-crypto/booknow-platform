@@ -224,16 +224,22 @@ export default function Flightlisting({ params }) {
   const infants = Number(slug[8] || localStorageData?.infants || 0);
 
   return (
-    <Box sx={{ 
-      maxWidth: "lg", 
-      mx: "auto", 
-      px: { xs: 1.5, sm: 2, md: 3, lg: 3 },
-      pb: { xs: 4, sm: 6, md: 8, lg: 8 },
-      fontFamily: "'Inter', sans-serif",
-      "& .MuiTypography-root": { fontFamily: "inherit" } 
-    }}>
+    <Box sx={{ backgroundColor: "#f1f5f9", minHeight: "100vh", py: { xs: 2, sm: 2, md: 2 } }}>
+      <Box sx={{ 
+        maxWidth: "lg", 
+        mx: "auto", 
+        px: { xs: 1.5, sm: 2, md: 3, lg: 3 },
+        pb: { xs: 4, sm: 6, md: 8, lg: 8 },
+        fontFamily: "'Inter', sans-serif",
+        "& .MuiTypography-root": { fontFamily: "inherit" } 
+      }}>
      
-
+      {/* Flight Search Form */}
+      {showFlightSearchForm && (
+        <Box sx={{ mb: 2, backgroundColor: "#fff",border: "1px solid #e0e0e0ca", borderRadius: "12px", py: 0 }}>
+          <FlightSearchForm />
+        </Box>
+      )}
 
       {/* Main Layout: Filters (Left) + Cards (Right) OR Booking Form */}
       {showBookingForm ? (
@@ -304,10 +310,10 @@ export default function Flightlisting({ params }) {
               alignItems: "center", 
               gap: 1 
             }}>
-              <Typography sx={{ fontSize: { xs: "0.65rem", sm: "0.7rem", md: "0.7rem", lg: "0.7rem" }, fontWeight: 700, color:"#1F2937" }}>
+              <Typography sx={{ fontSize: "14px", fontWeight: 700, color:"#1F2937" }}>
                 {flights.length} Flights
               </Typography>
-              <Typography variant="caption" sx={{ color: "rgb(75 85 99 / var(--tw-text-opacity, 1))", fontSize: { xs: "0.7rem", sm: "0.8rem", md: "0.8rem", lg: "0.8rem" } }}>
+              <Typography sx={{ color: "rgb(75 85 99 / var(--tw-text-opacity, 1))", fontSize: "14px" }}>
                 Found from 2 Supplier(s)
               </Typography>
             </Box>
@@ -1073,6 +1079,7 @@ export default function Flightlisting({ params }) {
         </Box>
       </Box>
       )}
+      </Box>
     </Box>
   );
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import redis from '@/lib/redis';
+import { tours } from '@/app/tour-results/toursData';
 
 export async function GET() {
   const CACHE_KEY = 'tours_data';
@@ -15,16 +16,11 @@ export async function GET() {
       });
     }
 
-    // 2. If not in Redis, fetch from "Database" (Mocking here)
-    console.log('Cache MISS - Fetching from DB');
-    const tours = [
-      { id: 1, title: 'Beautiful Paris', price: 1200 },
-      { id: 2, title: 'Sunny Dubai', price: 800 },
-      { id: 3, title: 'Historic Rome', price: 950 },
-    ];
+    // 2. If not in Redis, use tours data
+    console.log('Cache MISS - Fetching from Data');
 
-    // Simulate DB delay
-    await new Promise((resolve) => setTimeout(resolve, 500));
+    // Simulate slight delay (as if fetching from DB)
+    await new Promise((resolve) => setTimeout(resolve, 200));
 
     // 3. Store in Redis for next time (Cache for 1 hour)
     await redis.set(CACHE_KEY, JSON.stringify(tours), 'EX', 3600);
@@ -34,12 +30,7 @@ export async function GET() {
     });
   } catch (error) {
     console.error('Redis error:', error);
-    // Fallback to "DB" if Redis fails
-    const tours = [
-      { id: 1, title: 'Beautiful Paris', price: 1200 },
-      { id: 2, title: 'Sunny Dubai', price: 800 },
-      { id: 3, title: 'Historic Rome', price: 950 },
-    ];
+    // Fallback to tours data if Redis fails
     return NextResponse.json(tours);
   }
 }

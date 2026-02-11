@@ -316,7 +316,7 @@ export default function FlightFilters({
               border: "1px solid #E5E7EB",
               borderRadius: 1.5,
               p: 0.5,
-              width: "92%",
+              width: "100%",
               cursor: "pointer",
               transition: "all 0.2s ease",
               "&:hover": {

@@ -57,6 +57,8 @@ import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import dayjs from 'dayjs';
 
+import { useGlobalContext } from '@/app/context/GlobalContext';
+
 export default function FlightBookingForm({ 
   flight, 
   onBack,
@@ -64,6 +66,13 @@ export default function FlightBookingForm({
   childrenCount = 0,
   infants = 0
 }) {
+  const { setHideLayout } = useGlobalContext();
+
+  useEffect(() => {
+    setHideLayout(true);
+    return () => setHideLayout(false);
+  }, [setHideLayout]);
+
   const travelers = adults + childrenCount + infants;
   
   const [bookingType, setBookingType] = useState('guest'); // 'guest' or 'login'
@@ -224,27 +233,38 @@ export default function FlightBookingForm({
     }}>
       <Container maxWidth="lg">
         {/* Header Navigation */}
-        <Box sx={{ mb: 3 }} width={450}>
-          <Button
-            startIcon={<ArrowBackIcon sx={{ fontSize: 18, color: '#4B5563' }} />}
-            onClick={onBack}
-            sx={{ 
-              textTransform: 'none', 
-              color: '#4B5563',
-              fontSize: '14px',
-              '&:hover': { bgcolor: 'transparent', color: '#0058E6' }
-            }}
-          >
-            Back to Search
-          </Button>
+        <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: 670 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mt: 1 }}>
-            <Box sx={{ p: 0.8, borderRadius: '6px', display: 'flex' }}>
-              <FlightIcon sx={{ color: '#2563EB', fontSize: 22 }} />
+            <Box 
+              onClick={onBack}
+              sx={{ 
+                p: 1.2, 
+                borderRadius: '8px', 
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                border: '1px solid #E2E8F0',
+                bgcolor: '#f1f5f9',
+                '&:hover': { bgcolor: '#F8FAFC', borderColor: '#60A5FA' }
+              }}>
+              <ArrowBackIcon sx={{ color: '#020817', fontSize: 20 }} />
             </Box>
-            <Typography variant="h5" sx={{ fontWeight: 700, color: '#111827' }}>
-              Flight Booking
-            </Typography>
+            <Box>
+              <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#1E293B', lineHeight: 1.2 }}>
+                Booking
+              </Typography>
+              <Typography sx={{ fontSize: '14px', color: '#475569' }}>
+                Select your flight Booking
+              </Typography>
+            </Box>
           </Box>
+          <Box
+            component="img"
+            src="/logo.png"
+            alt="Logo"
+            sx={{ height: 32, width: 'auto' }}
+          />
         </Box>
 
         <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
@@ -1095,7 +1115,7 @@ export default function FlightBookingForm({
                 </Box>
 
                 <Box sx={{ p: 3 }}>
-                   <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#020817', mb: 3 }}>Booking Summary</Typography>
+                   <Typography sx={{ fontSize: '24px', fontWeight: 700, color: '#020817', mb: 1}}>Booking Summary</Typography>
 
                    {/* Flight Detail Collapsible */}
                    <Box sx={{ border: '1px solid #E2E8F0', borderRadius: '8px', mb: 3 }}>
@@ -1126,10 +1146,10 @@ export default function FlightBookingForm({
                             
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 1.5 }}>
                                <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#020817' }}>{flight.from}</Typography>
-                               <Box sx={{ flex: 1, height: '1px', bgcolor: '#E2E8F0', position: 'relative' }}>
-                                  <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-                                     <ArrowForwardIcon sx={{ fontSize: 14, color: '#94A3B8' }} />
-                                  </Box>
+                               <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                  <Box sx={{ flex: 1, height: '1px', bgcolor: '#E2E8F0' }} />
+                                  <ArrowForwardIcon sx={{ fontSize: 14, color: '#000' }} />
+                                  <Box sx={{ flex: 1, height: '1px', bgcolor: '#E2E8F0' }} />
                                </Box>
                                <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#020817' }}>{flight.to}</Typography>
                             </Box>
@@ -1143,7 +1163,7 @@ export default function FlightBookingForm({
                    </Box>
 
                    {/* Price Breakdown */}
-                   <Box sx={{ border: '1px solid #E2E8F0', borderRadius: '8px', p: 2, mb: 3 }}>
+                   <Box sx={{ border: '1px solid black', borderRadius: '8px', p: 2, mb: 3 , }}>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1.5 }}>
                          <Typography sx={{ fontSize: '14px', color: '#94A3B8' }}>Flight Price:</Typography>
                          <Typography sx={{ fontSize: '14px', color: '#64748B' }}>{flight.price}</Typography>
@@ -1152,7 +1172,7 @@ export default function FlightBookingForm({
                          <Typography sx={{ fontSize: '14px', color: '#94A3B8' }}>Taxes & Fees:</Typography>
                          <Typography sx={{ fontSize: '14px', color: '#64748B' }}>USD 0.00</Typography>
                       </Box>
-                      <Divider sx={{ mb: 2 }} />
+                      <Divider sx={{ mb: 2, bgcolor: 'black' }} />
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                          <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#94A3B8' }}>Total:</Typography>
                          <Typography sx={{ fontSize: '20px', fontWeight: 700, color: '#64748B' }}>{flight.price}</Typography>
@@ -1160,9 +1180,9 @@ export default function FlightBookingForm({
                    </Box>
 
                    {/* Confirmation Info */}
-                   <Box sx={{ bgcolor: '#DBEAFE', borderRadius: '8px', p: 2 }}>
+                   <Box sx={{ color: '#DBEAFE', borderRadius: '8px', p: 2, bgcolor: '#1E3A8A33' , border: '1px solid #25397efff1fff'}}>
                       <Box sx={{ display: 'flex', gap: 1.5 }}>
-                         <InfoOutlinedIcon sx={{ color: '#2563EB', fontSize: 20, mt: 0.3 }} />
+                         <InfoOutlinedIcon sx={{ color: '#2563EB', fontSize: 12, mt: 0.3 }} />
                          <Box>
                             {[
                                'Confirmation will be sent To Email',

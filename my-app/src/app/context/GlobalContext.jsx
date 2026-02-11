@@ -7,13 +7,16 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const [flightSearchData, setFlightSearchData] = useState(null);
   const [selectedFlight, setSelectedFlight] = useState(null);
+  const [hideLayout, setHideLayout] = useState(false);
 
   return (
     <GlobalContext.Provider value={{ 
       flightSearchData, 
       setFlightSearchData, 
       selectedFlight, 
-      setSelectedFlight 
+      setSelectedFlight,
+      hideLayout,
+      setHideLayout
     }}>
       {children}
     </GlobalContext.Provider>

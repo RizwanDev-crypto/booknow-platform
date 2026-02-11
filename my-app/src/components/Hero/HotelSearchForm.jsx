@@ -849,6 +849,20 @@ export default function HotelSearchForm() {
             fullWidth
             variant="contained"
             startIcon={<SearchIcon />}
+            onClick={() => {
+              // Save search data to localStorage
+              const searchData = {
+                destination: formData.destination,
+                checkInDate: formData.checkInDate.format('YYYY-MM-DD'),
+                checkOutDate: formData.checkOutDate.format('YYYY-MM-DD'),
+                rooms: formData.rooms,
+                nationality: formData.nationality,
+              };
+              localStorage.setItem('hotelSearchData', JSON.stringify(searchData));
+              
+              // Navigate to hotel results page
+              window.location.href = '/hotel-results';
+            }}
             sx={{
               height: 38,
               borderRadius: '8px',

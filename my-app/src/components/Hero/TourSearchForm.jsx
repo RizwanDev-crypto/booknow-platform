@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Box,
   Grid,
@@ -50,6 +51,7 @@ import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
 export default function TourSearchForm() {
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
     destination: '',
     destinationSearch: '',
@@ -58,6 +60,7 @@ export default function TourSearchForm() {
     tourType: 'Any Type',
     travelers: { adults: 2, children: 0 },
   });
+  const [error, setError] = React.useState(false);
 
   const [isDateOpen, setIsDateOpen] = React.useState(false);
   const [isDestinationOpen, setIsDestinationOpen] = React.useState(false);
@@ -91,6 +94,7 @@ export default function TourSearchForm() {
       destinationSearch: country.name
     }));
     setIsDestinationOpen(false);
+    setError(false);
     // Auto open calendar
     setTimeout(() => setIsDateOpen(true), 100);
   };
@@ -188,9 +192,11 @@ export default function TourSearchForm() {
               onChange={(e) => {
                 const val = e.target.value;
                 setFormData(prev => ({ ...prev, destinationSearch: val }));
+                if (error) setError(false);
                 if (!isDestinationOpen) setIsDestinationOpen(true);
               }}
               onClick={handleDestinationClick}
+              error={error}
               autoComplete="off"
               InputProps={{
                 startAdornment: (
@@ -215,6 +221,11 @@ export default function TourSearchForm() {
               }}
               sx={textFieldStyles}
             />
+            {error && (
+              <Typography sx={{ color: '#d32f2f', fontSize: '12px', mt: 0.5, ml: 1 }}>
+                Please select destination
+              </Typography>
+            )}
             {isDestinationOpen && filteredDestinations.length > 0 && (
               <ClickAwayListener onClickAway={handleDestinationClose}>
                 <Paper
@@ -640,6 +651,14 @@ export default function TourSearchForm() {
             fullWidth
             variant="contained"
             startIcon={<SearchIcon />}
+            onClick={() => {
+              if (!formData.destination) {
+                setError(true);
+                return;
+              }
+              localStorage.setItem('tourSearchData', JSON.stringify(formData));
+              router.push('/tour-results');
+            }}
             sx={{
               height: 38,
               borderRadius: '8px',
