@@ -26,12 +26,14 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import AirlineSeatReclineNormalIcon from '@mui/icons-material/AirlineSeatReclineNormal';
 
+import flightsData from '@/data/flights.json';
+
 export default function Flightlisting({ params }) {
   const unwrappedParams = use(params);
   const slug = unwrappedParams?.slug || [];
   const { flightSearchData, setSelectedFlight } = useGlobalContext();
-  const [isLoading, setIsLoading] = useState(true);
-  const [flights, setFlights] = useState([]);
+  // Removed isLoading state
+  const [flights, setFlights] = useState(flightsData); // Dispose of fetch and use imported data
   const [flightNumberFilter, setFlightNumberFilter] = useState("");
   const [priceRange, setPriceRange] = useState([425, 10000]);
   const [selectedStops, setSelectedStops] = useState([]);
@@ -61,28 +63,11 @@ export default function Flightlisting({ params }) {
     setAnchorEl(null);
   };
 
-  // ✅ Fetch flights from API
-  useEffect(() => {
-    const fetchFlights = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/flights');
-        if (!response.ok) throw new Error('Failed to fetch');
-        const data = await response.json();
-        setFlights(data);
-      } catch (error) {
-        console.error("Error fetching flights:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchFlights();
-  }, []);
+  // Removed fetchFlights useEffect
 
   // ✅ Load data from localStorage on component mount
   useEffect(() => {
-    setIsMounted(true); // Mark component as mounted
+    setTimeout(() => setIsMounted(true), 0); // Mark component as mounted
     
     const savedData = localStorage.getItem('flightSearchData');
     if (savedData) {
@@ -188,29 +173,7 @@ export default function Flightlisting({ params }) {
       return 0;
     });
 
-  // Loading State - Animated Loader
-  if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "60vh",
-          gap: 3
-        }}
-      >
-        <CircularProgress size={60} thickness={4} />
-        <Typography
-          variant="h6"
-          sx={{ color: "primary.main", fontWeight: 500 }}
-        >
-          ✈️ Searching for best flights...
-        </Typography>
-      </Box>
-    );
-  }
+  // Removed Loading State check since data is imported directly
 
   // Extract data from slug array or localStorage/defaults
   const from = slug[0] || localStorageData?.departure || "Origin";

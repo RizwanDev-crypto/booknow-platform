@@ -39,6 +39,8 @@ import OutlinedFlagOutlinedIcon from '@mui/icons-material/OutlinedFlagOutlined';
 import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
 
+import nationalitiesData from '@/data/nationalities.json';
+
 export default function ModifyHotelSearch({ hotelName }) {
   const [formData, setFormData] = React.useState({
     checkInDate: dayjs('2026-02-17'),
@@ -48,32 +50,27 @@ export default function ModifyHotelSearch({ hotelName }) {
     nationalitySearch: 'Afghanistan',
   });
 
-  const [nationalities, setNationalities] = React.useState([]);
+  // Removed isLoading/error states
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
   const [isCheckInOpen, setIsCheckInOpen] = React.useState(false);
   const [isCheckOutOpen, setIsCheckOutOpen] = React.useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = React.useState(false);
   const [isNationalityOpen, setIsNationalityOpen] = React.useState(false);
   const [isAgeSelectOpen, setIsAgeSelectOpen] = React.useState(false);
+  const [checkInAnchor, setCheckInAnchor] = React.useState(null);
+  const [checkOutAnchor, setCheckOutAnchor] = React.useState(null);
 
   const checkInInputRef = React.useRef(null);
   const checkOutInputRef = React.useRef(null);
   const guestsInputRef = React.useRef(null);
   const nationalityInputRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchNationalities();
-  }, []);
+  // Removed useEffect fetch
 
-  const handleCheckInClick = () => setIsCheckInOpen(!isCheckInOpen);
+  const handleCheckInClick = (event) => {
+    setCheckInAnchor(event.currentTarget);
+    setIsCheckInOpen(!isCheckInOpen);
+  };
   const handleCheckInClose = () => setIsCheckInOpen(false);
   const handleCheckInChange = (newDate) => {
     setFormData(prev => ({ 
@@ -87,7 +84,10 @@ export default function ModifyHotelSearch({ hotelName }) {
     setTimeout(() => setIsCheckOutOpen(true), 100);
   };
 
-  const handleCheckOutClick = () => setIsCheckOutOpen(!isCheckOutOpen);
+  const handleCheckOutClick = (event) => {
+    setCheckOutAnchor(event.currentTarget);
+    setIsCheckOutOpen(!isCheckOutOpen);
+  };
   const handleCheckOutClose = () => setIsCheckOutOpen(false);
   const handleCheckOutChange = (newDate) => {
     setFormData(prev => ({ ...prev, checkOutDate: newDate }));
@@ -212,7 +212,7 @@ export default function ModifyHotelSearch({ hotelName }) {
             handleCheckInClose();
             handleCheckOutClose();
           }}
-          sx={{ zIndex: 1400, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
+          sx={{ zIndex: 99, backgroundColor: 'rgba(0, 0, 0, 0.3)' }}
         />
       </Portal>
 
@@ -243,7 +243,7 @@ export default function ModifyHotelSearch({ hotelName }) {
       <Box sx={{ p: 3 }}>
         <Grid container spacing={2} alignItems="flex-end">
           {/* Check-in */}
-          <Grid item xs={12} md={2.5}>
+          <Grid item xs={12} md={2.5} width={{xs:400, sm:205, md:180 , lg:230}}>
             <Typography sx={labelStyles}>Check-in</Typography>
             <Box sx={{ position: "relative" }}>
               <TextField
@@ -258,9 +258,9 @@ export default function ModifyHotelSearch({ hotelName }) {
               />
               <Popper
                 open={isCheckInOpen}
-                anchorEl={checkInInputRef.current}
+                anchorEl={checkInAnchor}
                 placement="bottom-start"
-                sx={{ zIndex: 1500, width: 280 }}
+                sx={{ zIndex: 100, width: 280 }}
               >
                 <ClickAwayListener onClickAway={handleCheckInClose}>
                   <Paper sx={{ mt: 0.5, borderRadius: '12px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)', border: '1px solid #f1f5f9' }}>
@@ -279,7 +279,7 @@ export default function ModifyHotelSearch({ hotelName }) {
           </Grid>
 
           {/* Check-out */}
-          <Grid item xs={12} md={2.5}>
+          <Grid item xs={12} md={2.5} width={{xs:400, sm:205, md:180 , lg:230}}>
             <Typography sx={labelStyles}>Check-out</Typography>
             <Box sx={{ position: "relative" }}>
               <TextField
@@ -294,9 +294,9 @@ export default function ModifyHotelSearch({ hotelName }) {
               />
               <Popper
                 open={isCheckOutOpen}
-                anchorEl={checkOutInputRef.current}
+                anchorEl={checkOutAnchor}
                 placement="bottom-start"
-                sx={{ zIndex: 1500, width: 280 }}
+                sx={{ zIndex: 100, width: 280 }}
               >
                 <ClickAwayListener onClickAway={handleCheckOutClose}>
                   <Paper sx={{ mt: 0.5, borderRadius: '12px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)', border: '1px solid #f1f5f9' }}>
@@ -316,7 +316,7 @@ export default function ModifyHotelSearch({ hotelName }) {
           </Grid>
 
           {/* Guests & Rooms */}
-          <Grid item xs={12} md={2.5}>
+          <Grid item xs={12} md={2.5} width={{xs:400, sm:205, md:215 , lg:240}}>
             <Typography sx={labelStyles}>Guests & Rooms</Typography>
             <Box sx={{ position: "relative" }}>
               <TextField
@@ -336,14 +336,23 @@ export default function ModifyHotelSearch({ hotelName }) {
                 }}
                 sx={textFieldStyles}
               />
-              <Popper
-                open={isGuestsOpen}
-                anchorEl={guestsInputRef.current}
-                placement="bottom-start"
-                sx={{ zIndex: 1500, width: 320 }}
-              >
+              {isGuestsOpen && (
                 <ClickAwayListener onClickAway={handleGuestsClose}>
-                  <Paper sx={{ mt: 1, borderRadius: '16px', boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)', border: '1px solid #E5E7EB', p: 0, bgcolor: '#FFFFFF' }}>
+                  <Paper
+                    sx={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      mt: 1,
+                      borderRadius: '16px',
+                      boxShadow: '0 10px 40px rgba(0, 0, 0, 0.1)',
+                      border: '1px solid #E5E7EB',
+                      p: 0,
+                      bgcolor: '#FFFFFF',
+                      zIndex: 100,
+                      width: 320
+                    }}
+                  >
                     <Box sx={{ p: 2.5, maxHeight: '420px', overflowY: 'auto' }}>
                       {formData.rooms.map((room, index) => (
                         <Box key={room.id} sx={{ mb: index === formData.rooms.length - 1 ? 0 : 3 }}>
@@ -404,22 +413,25 @@ export default function ModifyHotelSearch({ hotelName }) {
                               </Typography>
                               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                                 {room.childAges.map((age, childIdx) => (
-                                  <Select
-                                    key={childIdx}
-                                    value={age}
-                                    onChange={(e) => updateChildAge(room.id, childIdx, e.target.value)}
-                                    size="small"
-                                    fullWidth
-                                    sx={{
-                                      height: 44,
-                                      borderRadius: '10px',
-                                      bgcolor: '#FFFFFF',
-                                      '& .MuiOutlinedInput-notchedOutline': { borderColor: '#E5E7EB' },
-                                      '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#D1D5DB' },
-                                      '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2563EB' },
-                                      fontSize: '0.95rem'
-                                    }}
-                                  >
+                                    <Select
+                                      key={childIdx}
+                                      value={age}
+                                      onChange={(e) => updateChildAge(room.id, childIdx, e.target.value)}
+                                      onOpen={() => setIsAgeSelectOpen(true)}
+                                      onClose={() => setIsAgeSelectOpen(false)}
+                                      onMouseDown={(e) => e.stopPropagation()}
+                                      size="small"
+                                      fullWidth
+                                      sx={{
+                                        height: 44,
+                                        borderRadius: '10px',
+                                        bgcolor: '#FFFFFF',
+                                        '& .MuiOutlinedInput-notchedOutline': { borderColor: '#E5E7EB' },
+                                        '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#D1D5DB' },
+                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#2563EB' },
+                                        fontSize: '0.95rem'
+                                      }}
+                                    >
                                     {[...Array(18)].map((_, i) => (
                                       <MenuItem key={i} value={i.toString()}>{i}</MenuItem>
                                     ))}
@@ -433,17 +445,19 @@ export default function ModifyHotelSearch({ hotelName }) {
                     </Box>
                   </Paper>
                 </ClickAwayListener>
-              </Popper>
+              )}
             </Box>
           </Grid>
 
           {/* Nationality */}
-          <Grid item xs={12} md={2.5}>
+          <Grid item xs={12} md={2.5} width={{xs:400, sm:205, md:180 , lg:230}}>
             <Typography sx={labelStyles}>Nationality</Typography>
             <Box sx={{ position: "relative" }}>
               <TextField
                 fullWidth
+                inputRef={nationalityInputRef}
                 placeholder="Select Nationality"
+                variant="outlined"
                 size="small"
                 value={formData.nationalitySearch}
                 onChange={(e) => {
@@ -451,41 +465,71 @@ export default function ModifyHotelSearch({ hotelName }) {
                   setFormData(prev => ({ ...prev, nationalitySearch: val }));
                   if (!isNationalityOpen) setIsNationalityOpen(true);
                 }}
-                onClick={() => setIsNationalityOpen(!isNationalityOpen)}
+                onClick={handleNationalityClick}
+                autoComplete="off"
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <ExpandMoreOutlinedIcon sx={{ fontSize: '14px', transform: isNationalityOpen ? 'rotate(180deg)' : 'none' }} />
+                      <ExpandMoreOutlinedIcon sx={{ 
+                        color: '#020817', 
+                        fontSize: '14px', 
+                        transition: 'transform 0.2s', 
+                        transform: isNationalityOpen ? 'rotate(180deg)' : 'none' 
+                      }} />
                     </InputAdornment>
                   ),
                 }}
                 sx={textFieldStyles}
               />
-              <Popper
-                open={isNationalityOpen}
-                anchorEl={nationalityInputRef.current}
-                placement="bottom-start"
-                sx={{ zIndex: 1510, width: 280 }}
-              >
-                <ClickAwayListener onClickAway={() => setIsNationalityOpen(false)}>
-                  <Paper sx={{ mt: 0.5, borderRadius: '8px', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)', border: '1px solid #f1f5f9', maxHeight: '200px', overflow: 'auto', bgcolor: 'background.paper' }}>
+              {isNationalityOpen && filteredNationalities.length > 0 && (
+                <ClickAwayListener onClickAway={handleNationalityClose}>
+                  <Paper
+                    sx={{
+                      position: "absolute",
+                      top: "100%",
+                      left: 0,
+                      right: 0,
+                      mt: 0.5,
+                      borderRadius: '12px',
+                      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                      border: '1px solid #f1f5f9',
+                      maxHeight: '300px',
+                      overflow: 'auto',
+                      zIndex: 100,
+                      bgcolor: 'background.paper',
+                    }}
+                  >
                     <List sx={{ py: 0 }}>
                       {filteredNationalities.map((country) => (
                         <ListItem key={country.code} disablePadding>
-                          <ListItemButton onClick={() => handleNationalitySelect(country)}>
-                            <ListItemText primary={country.name} primaryTypographyProps={{ fontSize: '13px' }} />
+                          <ListItemButton 
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              handleNationalitySelect(country);
+                            }}
+                            sx={{ py: 0.4, px: 2, '&:hover': { bgcolor: '#f8fafc' }, display: 'flex', alignItems: 'center', gap: 1.5 }}
+                          >
+                            <OutlinedFlagOutlinedIcon sx={{ fontSize: 14, color: '#020817' }} />
+                            <ListItemText 
+                              primary={country.name} 
+                              primaryTypographyProps={{ 
+                                fontSize: '14px', 
+                                color: '#020817',
+                                fontWeight: 400
+                              }} 
+                            />
                           </ListItemButton>
                         </ListItem>
                       ))}
                     </List>
                   </Paper>
                 </ClickAwayListener>
-              </Popper>
+              )}
             </Box>
           </Grid>
 
           {/* Update Button */}
-          <Grid item xs={12} md={2} sx={{ width: 105 }}  >
+          <Grid item xs={12} md={2} width={{xs:400, sm:205, md:105 , lg:105 }} >
             <Button
               fullWidth
               variant="contained"

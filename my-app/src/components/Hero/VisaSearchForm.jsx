@@ -45,6 +45,8 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import { useRouter } from 'next/navigation';
 
 
+import nationalitiesData from '@/data/nationalities.json';
+
 export default function VisaSearchForm() {
   const router = useRouter();
   const [formData, setFormData] = React.useState({
@@ -70,24 +72,12 @@ export default function VisaSearchForm() {
   const [isDateOpen, setIsDateOpen] = React.useState(false);
   const [isTravelerOpen, setIsTravelerOpen] = React.useState(false);
   
-  const [nationalities, setNationalities] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  // Initialize with imported data, removed isLoading
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
+  const [dateAnchor, setDateAnchor] = React.useState(null);
   const dateInputRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching nationalities:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchNationalities();
-  }, []);
+  // Removed useEffect fetch
 
   const handleDestinationSelect = (country) => {
     setFormData(prev => ({
@@ -98,6 +88,7 @@ export default function VisaSearchForm() {
     setErrors(prev => ({ ...prev, destination: false }));
     setIsDestinationOpen(false);
     if (formData.nationality) {
+      setDateAnchor(dateInputRef.current);
       setTimeout(() => setIsDateOpen(true), 100);
     }
   };
@@ -115,6 +106,7 @@ export default function VisaSearchForm() {
     setErrors(prev => ({ ...prev, nationality: false }));
     setIsNationalityOpen(false);
     if (formData.destination) {
+      setDateAnchor(dateInputRef.current);
       setTimeout(() => setIsDateOpen(true), 100);
     }
   };
@@ -167,7 +159,7 @@ export default function VisaSearchForm() {
           open={isDateOpen}
           onClick={() => setIsDateOpen(false)}
           sx={{ 
-            zIndex: 1400,
+            zIndex: 99,
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }}
         />
@@ -255,7 +247,7 @@ export default function VisaSearchForm() {
                     mt: 0.5,
                     maxHeight: 300,
                     overflow: "auto",
-                    zIndex: 1300,
+                    zIndex: 100,
                     borderRadius: '8px',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                     border: '1px solid #f1f5f9',
@@ -314,18 +306,26 @@ export default function VisaSearchForm() {
               autoComplete="off"
               error={errors.nationality}
               InputProps={{
-                endAdornment: formData.nationalitySearch && (
+                endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setFormData(prev => ({ ...prev, nationality: '', nationalitySearch: '' }));
-                      }}
-                      sx={{ color: '#94a3b8', '&:hover': { bgcolor: 'transparent' } }}
-                    >
-                      <HighlightOffOutlinedIcon sx={{ fontSize: 24 }} />
-                    </IconButton>
+                    {formData.nationalitySearch && (
+                      <IconButton
+                        size="small"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setFormData(prev => ({ ...prev, nationality: '', nationalitySearch: '' }));
+                        }}
+                        sx={{ color: '#94a3b8', '&:hover': { bgcolor: 'transparent' } }}
+                      >
+                        <HighlightOffOutlinedIcon sx={{ fontSize: 24 }} />
+                      </IconButton>
+                    )}
+                    <ExpandMoreOutlinedIcon sx={{ 
+                      color: '#020817', 
+                      fontSize: '14px',
+                      transition: 'transform 0.2s', 
+                      transform: isNationalityOpen ? 'rotate(180deg)' : 'none' 
+                    }} />
                   </InputAdornment>
                 ),
               }}
@@ -372,7 +372,7 @@ export default function VisaSearchForm() {
                     mt: 0.5,
                     maxHeight: 300,
                     overflow: "auto",
-                    zIndex: 1300,
+                    zIndex: 100,
                     borderRadius: '8px',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                     border: '1px solid #f1f5f9',
@@ -419,7 +419,10 @@ export default function VisaSearchForm() {
               fullWidth
               inputRef={dateInputRef}
               value={formData.travelDate.format('DD-MM-YYYY')}
-              onClick={() => setIsDateOpen(true)}
+              onClick={(e) => {
+                setDateAnchor(e.currentTarget);
+                setIsDateOpen(true);
+              }}
               readOnly
               variant="outlined"
               size="small"
@@ -456,15 +459,15 @@ export default function VisaSearchForm() {
 
             <Popper
               open={isDateOpen}
-              anchorEl={dateInputRef.current}
+              anchorEl={dateAnchor}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: dateAnchor?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={() => setIsDateOpen(false)}>
                 <Paper
                   sx={{
                     mt: 0.5,
-                    zIndex: 1500,
+                    zIndex: 100,
                     borderRadius: '12px',
                     boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
                     border: '1px solid #f1f5f9',
@@ -482,6 +485,7 @@ export default function VisaSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -552,7 +556,7 @@ export default function VisaSearchForm() {
           <InputAdornment position="end">
             <ExpandMoreOutlinedIcon sx={{ 
               color: '#020817', 
-              fontSize: '16px',
+              fontSize: '14px',
               cursor: 'pointer', 
               transition: 'transform 0.2s', 
               transform: isVisaOpen ? 'rotate(180deg)' : 'none' 
@@ -599,7 +603,7 @@ export default function VisaSearchForm() {
             mt: 0.5,
             maxHeight: 300,
             overflow: "auto",
-            zIndex: 1300,
+            zIndex: 100,
             borderRadius: '8px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             border: '1px solid #e2e8f0',
@@ -665,7 +669,7 @@ export default function VisaSearchForm() {
           <InputAdornment position="end">
             <ExpandMoreOutlinedIcon sx={{ 
               color: '#020817', 
-              fontSize: '16px',
+              fontSize: '14px',
               cursor: 'pointer', 
               transition: 'transform 0.2s', 
               transform: isProcessingOpen ? 'rotate(180deg)' : 'none' 
@@ -711,7 +715,7 @@ export default function VisaSearchForm() {
             mt: 0.5,
             maxHeight: 300,
             overflow: "auto",
-            zIndex: 1300,
+            zIndex: 100,
             borderRadius: '8px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             border: '1px solid #e2e8f0',
@@ -789,7 +793,7 @@ export default function VisaSearchForm() {
           <InputAdornment position="end">
             <ExpandMoreOutlinedIcon sx={{ 
               color: '#020817', 
-              fontSize: '16px',
+              fontSize: '14px',
               cursor: 'pointer', 
               transition: 'transform 0.2s', 
               transform: isTravelerOpen ? 'rotate(180deg)' : 'none' 
@@ -833,7 +837,7 @@ export default function VisaSearchForm() {
             left: 0,
             right: 0,
             mt: 1,
-            zIndex: 1300,
+            zIndex: 100,
             borderRadius: '12px',
             boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
             border: '1px solid #f1f5f9',

@@ -14,7 +14,8 @@ import {
   Button,
   Slider,
   Select,
-  MenuItem
+  MenuItem,
+  Paper
 } from '@mui/material';
 import Link from 'next/link';
 import StarIcon from '@mui/icons-material/Star';
@@ -25,11 +26,31 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import { hotels } from '../hotelsData';
 import ModifyHotelSearch from '../ModifyHotelSearch';
 import HotelDetailsGallery from '../HotelDetailsGallery';
+import RoomSelection from '../RoomSelection';
+import HotelLocationPolicies from '../HotelLocationPolicies';
+import Checkout from '../Checkout';
 
 export default function HotelDetailsPage() {
   const { id } = useParams();
   const hotel = hotels.find(h => h.id === parseInt(id)) || hotels[0];
   const [priceRange, setPriceRange] = React.useState([100, 200]);
+  const [step, setStep] = React.useState('details'); // 'details' or 'checkout'
+  const [selectedRate, setSelectedRate] = React.useState(null);
+
+  const handleContinue = (rate) => {
+    setSelectedRate(rate);
+    setStep('checkout');
+    window.scrollTo(0, 0);
+  };
+
+  const handleBack = () => {
+    setStep('details');
+    window.scrollTo(0, 0);
+  };
+
+  if (step === 'checkout') {
+    return <Checkout hotel={hotel} onBack={handleBack} selectedRate={selectedRate} />;
+  }
 
   return (
     <Box sx={{ bgcolor: '#F9FAFB', minHeight: '100vh', py: 4 }}>
@@ -90,15 +111,15 @@ export default function HotelDetailsPage() {
               <Typography sx={{ fontWeight: 700, mb: 2, color: '#000000', fontSize: '1.1rem' }}>
                 About this stay
               </Typography>
-              <Typography sx={{ color: '#4B5563',  textAlign: 'justify', fontSize: '0.9rem' }}>
+              <Typography sx={{ color: '#4B5563',  textAlign: 'justify', fontSize: '0.9rem' }} width={{xs:400, sm:460, md:'75%' , lg:'100%'}}>
                 {hotel.description}
               </Typography>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Typography sx={{ fontWeight: 700, mb: 2, color: '#000000', fontSize: '1.1rem' }}>
+              <Typography sx={{ fontWeight: 700, mb: 2, color: '#000000', fontSize: '1.1rem' }} width={{xs:400, sm:460, md:'100%' , lg:'100%'}}>
                 Key amenities
               </Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }} width={{xs:400, sm:460, md:'100%' , lg:'100%'}}>
                 {hotel.keyAmenities?.map((amenity, index) => (
                   <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                     <CheckCircleIcon sx={{ color: '#4B5563', fontSize: 18 }} />
@@ -150,7 +171,6 @@ export default function HotelDetailsPage() {
                   height: 40,
                   borderRadius: 2,
                   fontSize: '0.8rem',
-                  bgcolor: '#F9FAFB',
                   '& .MuiSelect-icon': { fontSize: 20 },
                   '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#1A53ff' }
                 }}
@@ -203,7 +223,6 @@ export default function HotelDetailsPage() {
                   height: 40,
                   borderRadius: 2,
                   fontSize: '0.8rem',
-                  bgcolor: '#F9FAFB',
                   '& .MuiSelect-icon': { fontSize: 20 },
                   '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#1A53ff' }
                 }}
@@ -224,18 +243,24 @@ export default function HotelDetailsPage() {
                 fontWeight: 600,
                 borderRadius: 2,
                 px: 3,
+                bgcolor: '#F9FAFB',
                 
-                '&:hover': { bgcolor: '#F9FAFB', borderColor: '#D1D5DB' }
+                '&:hover': { bgcolor: '#F3F4F6', borderColor: '#D1D5DB' }
               }}
             >
               Reset
             </Button>
           </Box>
+
+           {/* Room Selection List */}
+           <RoomSelection onContinue={handleContinue} />
+           
+           {/* Location and Policies */}
+           <HotelLocationPolicies hotel={hotel} />
         </Paper>
       </Container>
     </Box>
   );
 }
 
-// Sub-components need Paper
-import { Paper } from '@mui/material';
+

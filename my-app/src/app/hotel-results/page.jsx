@@ -45,13 +45,14 @@ export default function HotelResults() {
   };
 
   // Reset pagination when filters or sort change
-  useEffect(() => {
+  const handleFilterChange = (setter, value) => {
+    setter(value);
     setVisibleHotelsCount(7);
-  }, [hotelNameFilter, priceRange, selectedStarRatings, selectedAccommodationTypes, selectedAmenities, sortLabel]);
+  };
 
   // Load data from localStorage on component mount
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => setIsMounted(true), 0);
     
     const savedData = localStorage.getItem('hotelSearchData');
     if (savedData) {
@@ -157,15 +158,15 @@ export default function HotelResults() {
           <HotelFilters 
             hotelCount={filteredHotels.length}
             hotelNameFilter={hotelNameFilter}
-            onHotelNameChange={setHotelNameFilter}
+            onHotelNameChange={(val) => handleFilterChange(setHotelNameFilter, val)}
             priceRange={priceRange}
-            onPriceChange={setPriceRange}
+            onPriceChange={(val) => handleFilterChange(setPriceRange, val)}
             selectedStarRatings={selectedStarRatings}
-            onStarRatingsChange={setSelectedStarRatings}
+            onStarRatingsChange={(val) => handleFilterChange(setSelectedStarRatings, val)}
             selectedAccommodationTypes={selectedAccommodationTypes}
-            onAccommodationTypesChange={setSelectedAccommodationTypes}
+            onAccommodationTypesChange={(val) => handleFilterChange(setSelectedAccommodationTypes, val)}
             selectedAmenities={selectedAmenities}
-            onAmenitiesChange={setSelectedAmenities}
+            onAmenitiesChange={(val) => handleFilterChange(setSelectedAmenities, val)}
             starRatingCounts={starRatingCounts}
             accommodationTypeCounts={accommodationTypeCounts}
             amenityCounts={amenityCounts}
@@ -189,7 +190,7 @@ export default function HotelResults() {
                 {filteredHotels.length} {filteredHotels.length === 1 ? 'Hotel' : 'Hotels'}
                 {hotelNameFilter && (
                   <Box component="span" sx={{ fontWeight: 400, color: '#6B7280', fontSize: '14px', ml: 1 }}>
-                    for "{hotelNameFilter}"
+                    for &quot;{hotelNameFilter}&quot;
                   </Box>
                 )}
               </Typography>
@@ -252,9 +253,9 @@ export default function HotelResults() {
                   }
                 }}
               >
-                <MenuItem onClick={() => handleSortClose("Price: Low to High")}>Price: Low to High</MenuItem>
-                <MenuItem onClick={() => handleSortClose("Price: High to Low")}>Price: High to Low</MenuItem>
-                <MenuItem onClick={() => handleSortClose("Rating: High to Low")}>Rating: High to Low</MenuItem>
+                <MenuItem onClick={() => { handleSortClose("Price: Low to High"); setVisibleHotelsCount(7); }}>Price: Low to High</MenuItem>
+                <MenuItem onClick={() => { handleSortClose("Price: High to Low"); setVisibleHotelsCount(7); }}>Price: High to Low</MenuItem>
+                <MenuItem onClick={() => { handleSortClose("Rating: High to Low"); setVisibleHotelsCount(7); }}>Rating: High to Low</MenuItem>
               </Menu>
             </Box>
           </Box>
@@ -296,7 +297,7 @@ export default function HotelResults() {
             {filteredHotels.length === 0 && (
               <Paper sx={{ p: 4, textAlign: "center", borderRadius: 2, width: "100%", ml: { xs: 0, md: 2 } }}>
                 <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
-                  No hotels found matching your search "{hotelNameFilter}".
+                  No hotels found matching your search &quot;{hotelNameFilter}&quot;.
                 </Typography>
                 <Button 
                   variant="contained" 

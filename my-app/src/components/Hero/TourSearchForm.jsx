@@ -50,6 +50,8 @@ import DateRangeIcon from '@mui/icons-material/DateRange';
 import CalendarViewWeekIcon from '@mui/icons-material/CalendarViewWeek';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 
+import nationalitiesData from '@/data/nationalities.json';
+
 export default function TourSearchForm() {
   const router = useRouter();
   const [formData, setFormData] = React.useState({
@@ -61,6 +63,7 @@ export default function TourSearchForm() {
     travelers: { adults: 2, children: 0 },
   });
   const [error, setError] = React.useState(false);
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
 
   const [isDateOpen, setIsDateOpen] = React.useState(false);
   const [isDestinationOpen, setIsDestinationOpen] = React.useState(false);
@@ -68,22 +71,10 @@ export default function TourSearchForm() {
   const [isDurationOpen, setIsDurationOpen] = React.useState(false);
   const [isTypeOpen, setIsTypeOpen] = React.useState(false);
   
-  const [nationalities, setNationalities] = React.useState([]); // Using same API for city search
-  const travelerClickTimestamp = React.useRef(0);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const dateInputRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchNationalities();
-  }, []);
+  // Removed useEffect fetch
 
   const handleDestinationClick = () => setIsDestinationOpen(true);
   const handleDestinationClose = () => setIsDestinationOpen(false);
@@ -96,10 +87,14 @@ export default function TourSearchForm() {
     setIsDestinationOpen(false);
     setError(false);
     // Auto open calendar
+    setAnchorEl(dateInputRef.current);
     setTimeout(() => setIsDateOpen(true), 100);
   };
 
-  const handleDateClick = () => setIsDateOpen(true);
+  const handleDateClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setIsDateOpen(true);
+  };
   const handleDateClose = () => setIsDateOpen(false);
   const handleDateChange = (newDate) => {
     setFormData(prev => ({ ...prev, startDate: newDate }));
@@ -169,7 +164,7 @@ export default function TourSearchForm() {
           open={isDateOpen}
           onClick={handleDateClose}
           sx={{ 
-            zIndex: 1400,
+            zIndex: 99,
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }}
         />
@@ -239,7 +234,7 @@ export default function TourSearchForm() {
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
                     maxHeight: '300px',
-                    zIndex: 1300,
+                    zIndex: 100,
                     overflow: 'auto',
                   }}
                 >
@@ -300,9 +295,9 @@ export default function TourSearchForm() {
             />
             <Popper
               open={isDateOpen}
-              anchorEl={dateInputRef.current}
+              anchorEl={anchorEl}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: anchorEl?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={handleDateClose}>
                 <Paper
@@ -325,6 +320,7 @@ export default function TourSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -383,10 +379,11 @@ export default function TourSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isDurationOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -415,7 +412,7 @@ export default function TourSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -472,10 +469,11 @@ export default function TourSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isTypeOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -504,7 +502,7 @@ export default function TourSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -562,10 +560,11 @@ export default function TourSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isTravelersOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -595,7 +594,7 @@ export default function TourSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                     minWidth: '280px',
                   }}
                 >

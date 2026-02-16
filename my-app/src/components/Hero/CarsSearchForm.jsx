@@ -1,5 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 import * as React from 'react';
 import {
   Box,
@@ -34,7 +36,10 @@ import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import TimeToLeaveIcon from '@mui/icons-material/TimeToLeave';
 
+import nationalitiesData from '@/data/nationalities.json';
+
 export default function CarsSearchForm() {
+  const router = useRouter();
   const [formData, setFormData] = React.useState({
     pickupLocation: '',
     pickupSearch: '',
@@ -46,31 +51,23 @@ export default function CarsSearchForm() {
     driverAge: '25+ years old',
   });
 
-  const [nationalities, setNationalities] = React.useState([]);
+  // Initialize with imported data
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
   const [isPickupOpen, setIsPickupOpen] = React.useState(false);
   const [isDropoffOpen, setIsDropoffOpen] = React.useState(false);
   const [isPickupDateOpen, setIsPickupDateOpen] = React.useState(false);
   const [isReturnDateOpen, setIsReturnDateOpen] = React.useState(false);
   const [isCarTypeOpen, setIsCarTypeOpen] = React.useState(false);
   const [isAgeOpen, setIsAgeOpen] = React.useState(false);
+  const [pickupDateAnchor, setPickupDateAnchor] = React.useState(null);
+  const [returnDateAnchor, setReturnDateAnchor] = React.useState(null);
 
   const pickupInputRef = React.useRef(null);
   const dropoffInputRef = React.useRef(null);
   const pickupDateRef = React.useRef(null);
   const returnDateRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchNationalities();
-  }, []);
+  // Removed useEffect fetch
 
   const handlePickupClick = () => setIsPickupOpen(true);
   const handlePickupClose = () => setIsPickupOpen(false);
@@ -93,10 +90,14 @@ export default function CarsSearchForm() {
       dropoffSearch: country.name 
     }));
     setIsDropoffOpen(false);
+    setPickupDateAnchor(pickupDateRef.current);
     setTimeout(() => setIsPickupDateOpen(true), 100);
   };
 
-  const handlePickupDateClick = () => setIsPickupDateOpen(true);
+  const handlePickupDateClick = (event) => {
+    setPickupDateAnchor(event.currentTarget);
+    setIsPickupDateOpen(true);
+  };
   const handlePickupDateClose = () => setIsPickupDateOpen(false);
   const handlePickupDateChange = (newDate) => {
     setFormData(prev => ({ 
@@ -105,10 +106,14 @@ export default function CarsSearchForm() {
       returnDate: newDate.isAfter(prev.returnDate) ? newDate.add(2, 'day') : prev.returnDate
     }));
     setIsPickupDateOpen(false);
+    setReturnDateAnchor(returnDateRef.current);
     setTimeout(() => setIsReturnDateOpen(true), 100);
   };
 
-  const handleReturnDateClick = () => setIsReturnDateOpen(true);
+  const handleReturnDateClick = (event) => {
+    setReturnDateAnchor(event.currentTarget);
+    setIsReturnDateOpen(true);
+  };
   const handleReturnDateClose = () => setIsReturnDateOpen(false);
   const handleReturnDateChange = (newDate) => {
     setFormData(prev => ({ ...prev, returnDate: newDate }));
@@ -167,7 +172,7 @@ export default function CarsSearchForm() {
             handleReturnDateClose();
           }}
           sx={{ 
-            zIndex: 1400,
+            zIndex: 99,
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }}
         />
@@ -226,7 +231,7 @@ export default function CarsSearchForm() {
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
                     maxHeight: '300px',
-                    zIndex: 1300,
+                    zIndex: 100,
                     overflow: 'auto',
                   }}
                 >
@@ -307,7 +312,7 @@ export default function CarsSearchForm() {
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
                     maxHeight: '300px',
-                    zIndex: 1300,
+                    zIndex: 100,
                     overflow: 'auto',
                   }}
                 >
@@ -368,9 +373,9 @@ export default function CarsSearchForm() {
             />
             <Popper
               open={isPickupDateOpen}
-              anchorEl={pickupDateRef.current}
+              anchorEl={pickupDateAnchor}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: pickupDateRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: pickupDateAnchor?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={handlePickupDateClose}>
                 <Paper
@@ -393,6 +398,7 @@ export default function CarsSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -464,9 +470,9 @@ export default function CarsSearchForm() {
             />
             <Popper
               open={isReturnDateOpen}
-              anchorEl={returnDateRef.current}
+              anchorEl={returnDateAnchor}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: returnDateRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: returnDateAnchor?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={handleReturnDateClose}>
                 <Paper
@@ -490,6 +496,7 @@ export default function CarsSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -549,10 +556,11 @@ export default function CarsSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isCarTypeOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -581,7 +589,7 @@ export default function CarsSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -628,10 +636,11 @@ export default function CarsSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isAgeOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -660,7 +669,7 @@ export default function CarsSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -694,6 +703,10 @@ export default function CarsSearchForm() {
             fullWidth
             variant="contained"
             startIcon={<SearchIcon />}
+            onClick={() => {
+              localStorage.setItem('carSearchData', JSON.stringify(formData));
+              router.push('/car-results');
+            }}
             sx={{
               height: 38,
               borderRadius: '8px',

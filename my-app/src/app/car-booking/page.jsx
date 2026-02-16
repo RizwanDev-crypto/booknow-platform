@@ -36,10 +36,11 @@ export default function CarBookingPage() {
         setTimeLeft((prev) => prev - 1);
       }, 1000);
       return () => clearInterval(timer);
-    } else if (showPayment && timeLeft === 0) {
-      setShowTimeoutModal(true);
+    } else if (showPayment && timeLeft === 0 && !showTimeoutModal) {
+      // Defer state update to avoid cascading render lint error
+      setTimeout(() => setShowTimeoutModal(true), 0);
     }
-  }, [showPayment, timeLeft]);
+  }, [showPayment, timeLeft, showTimeoutModal]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60);
@@ -53,10 +54,10 @@ export default function CarBookingPage() {
     const searchParams = localStorage.getItem('carSearchData');
     
     if (carData) {
-      setSelectedCar(JSON.parse(carData));
+      setTimeout(() => setSelectedCar(JSON.parse(carData)), 0);
     }
     if (searchParams) {
-      setSearchData(JSON.parse(searchParams));
+      setTimeout(() => setSearchData(JSON.parse(searchParams)), 0);
     }
   }, []);
 
@@ -237,7 +238,7 @@ export default function CarBookingPage() {
                     <Box sx={{ mb: 2 }}>
                         <Typography sx={{ fontWeight: 700, color: "#023669", mb: 1 }}>Cancellation Policy</Typography>
                         <Typography sx={{ fontSize: "14px", color: "#6b7280", mb: 2 }}>
-                            At Bookkaru, we understand that plans can sometimes change unexpectedly. To provide you with a hassle-free experience, we've crafted a cancellation policy that balances flexibility and fairness.
+                            At Bookkaru, we understand that plans can sometimes change unexpectedly. To provide you with a hassle-free experience, we&apos;ve crafted a cancellation policy that balances flexibility and fairness.
                         </Typography>
                         
                          <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Cancellation Period:</Typography>
@@ -288,9 +289,9 @@ export default function CarBookingPage() {
                             Customers are responsible for covering their own fuel expenses. Each vehicle is provided with a specific fuel level, and customers must return the vehicle with the same amount of fuel. Any difference will incur a charge, along with a PKR 500 Service Fee if the original fuel level is not maintained
                         </Typography>
 
-                        <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Chauffeur's Accommodation (Intercity Rides)</Typography>
+                        <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Chauffeur&apos;s Accommodation (Intercity Rides)</Typography>
                         <Typography sx={{ fontSize: "14px", color: "#6b7280", mb: 2 }}>
-                            For intercity rides, customers are responsible for the chauffeur's food and accommodation. Alternatively, a daily allowance of PKR 2000 can be provided if the customer opts not to arrange for food and accommodation
+                            For intercity rides, customers are responsible for the chauffeur&apos;s food and accommodation. Alternatively, a daily allowance of PKR 2000 can be provided if the customer opts not to arrange for food and accommodation
                         </Typography>
 
                         <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>E-challan Responsibility</Typography>
@@ -300,7 +301,7 @@ export default function CarBookingPage() {
 
                         <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Rental Duration</Typography>
                         <Typography sx={{ fontSize: "14px", color: "#6b7280", mb: 2 }}>
-                            The chauffeur-driven rental period, exclusively for intra-city rides, spans 12 hours per day, starting from the booked time. For example, if a customer reserves a ride at 9 AM to 9 PM or 7 AM to 7 PM, the rental will be available until 12 AM. Similarly, if a reservation is made at 4 PM, the rental will also extend until 12 AM. The rental fee covers a chauffeur-driven car but excludes fuel, parking charges, etc
+                            The chauffeur-driven rental period, exclusively for intra-city rides, spans 12 hours per day, starting from the booked time. For example, if a customer reserves a ride at 9 AM to 9 PM or 7 AM to 7 PM, the rental will be available until 12 AM. Similarly, if a reservation is made at 4 PM, the rental will also extend until 12 AM. The rental fee covers a chauffeur-driven car but excludes fuel, parking charges, etc.
                         </Typography>
 
                         <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Chauffeur Rest & Meal (Intra & Intercity Rides)</Typography>
@@ -320,7 +321,7 @@ export default function CarBookingPage() {
 
                         <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Additional Charges</Typography>
                         <Typography sx={{ fontSize: "14px", color: "#6b7280", mb: 2 }}>
-                            Toll taxes, parking fees, and any other incidental charges are the responsibility of the renting party
+                            Toll taxes, parking fees, and any other incidental charges are the responsibility of the renting party.
                         </Typography>
 
                          <Typography sx={{ fontWeight: 700, color: "#023669", fontSize: "14px" }}>Intercity Drop-off</Typography>

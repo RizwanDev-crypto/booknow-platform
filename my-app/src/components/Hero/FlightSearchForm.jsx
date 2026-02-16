@@ -17,6 +17,9 @@ import {
   ListItemText,
   Paper,
   ClickAwayListener,
+  Backdrop,
+  Portal,
+  Popper,
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -41,6 +44,8 @@ import CorporateFareRoundedIcon from '@mui/icons-material/CorporateFareRounded';
 import WorkspacePremiumRoundedIcon from '@mui/icons-material/WorkspacePremiumRounded';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 
+import nationalitiesData from '@/data/nationalities.json';
+
 export default function FlightSearchForm() {
   const router = useRouter();
   const [formData, setFormData] = React.useState({
@@ -57,15 +62,19 @@ export default function FlightSearchForm() {
     arrivalSearch: '',
   });
 
-  const [nationalities, setNationalities] = React.useState([]);
+  // Initialize with imported data
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
   const [isDepartureOpen, setIsDepartureOpen] = React.useState(false);
   const [isArrivalOpen, setIsArrivalOpen] = React.useState(false);
   const [isDateOpen, setIsDateOpen] = React.useState(false);
   const [isReturnDateOpen, setIsReturnDateOpen] = React.useState(false);
   const [isPassengersOpen, setIsPassengersOpen] = React.useState(false);
-  const [isTypeOpen, setIsTypeOpen] = React.useState(false);
   const [isClassOpen, setIsClassOpen] = React.useState(false);
+  const [isTypeOpen, setIsTypeOpen] = React.useState(false);
+  const [departureAnchor, setDepartureAnchor] = React.useState(null);
+  const [returnAnchor, setReturnAnchor] = React.useState(null);
   const dateInputRef = React.useRef(null);
+  const returnDateInputRef = React.useRef(null);
 
   React.useEffect(() => {
     const savedData = localStorage.getItem('flightSearchData');
@@ -80,17 +89,7 @@ export default function FlightSearchForm() {
         console.error('Error loading flight search data from localStorage:', error);
       }
     }
-
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchNationalities();
+    // Removed fetchNationalities call
   }, []);
 
   const handleDepartureClick = () => setIsDepartureOpen(true);
@@ -105,6 +104,7 @@ export default function FlightSearchForm() {
     if (!formData.arrival) {
       setTimeout(() => setIsArrivalOpen(true), 100);
     } else {
+      setDepartureAnchor(dateInputRef.current);
       setTimeout(() => setIsDateOpen(true), 100);
     }
   };
@@ -119,11 +119,15 @@ export default function FlightSearchForm() {
     }));
     setIsArrivalOpen(false);
     if (formData.departure) {
+      setDepartureAnchor(dateInputRef.current);
       setTimeout(() => setIsDateOpen(true), 100);
     }
   };
 
-  const handleDateClick = () => setIsDateOpen(!isDateOpen);
+  const handleDateClick = (event) => {
+    setDepartureAnchor(event.currentTarget);
+    setIsDateOpen(!isDateOpen);
+  };
   const handleDateClose = () => setIsDateOpen(false);
   const handleDateChange = (newDate) => {
     setFormData(prev => ({ 
@@ -135,11 +139,15 @@ export default function FlightSearchForm() {
     }));
     setIsDateOpen(false);
     if (formData.flightType === 'Round Trip') {
+      setReturnAnchor(returnDateInputRef.current);
       setTimeout(() => setIsReturnDateOpen(true), 100);
     }
   };
 
-  const handleReturnDateClick = () => setIsReturnDateOpen(!isReturnDateOpen);
+  const handleReturnDateClick = (event) => {
+    setReturnAnchor(event.currentTarget);
+    setIsReturnDateOpen(!isReturnDateOpen);
+  };
   const handleReturnDateClose = () => setIsReturnDateOpen(false);
   const handleReturnDateChange = (newDate) => {
     setFormData(prev => ({ ...prev, returnDate: newDate }));
@@ -222,6 +230,20 @@ export default function FlightSearchForm() {
   };
 
   return (
+    <>
+      <Portal>
+        <Backdrop
+          open={isDateOpen || isReturnDateOpen}
+          onClick={() => {
+            setIsDateOpen(false);
+            setIsReturnDateOpen(false);
+          }}
+          sx={{ 
+            zIndex: 99,
+            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+          }}
+        />
+      </Portal>
     <Box sx={{ p: { xs: 2, md: 3 } }}>
       <Grid container spacing={2}>
         {/* Row 1: Departure, Swap, Arrival, Date */}
@@ -282,7 +304,7 @@ export default function FlightSearchForm() {
                       border: '1px solid #f1f5f9',
                       maxHeight: '300px',
                       overflow: 'auto',
-                      zIndex: 1300,
+                      zIndex: 100,
                     }}
                   >
                     <List sx={{ py: 0 }}>
@@ -382,7 +404,7 @@ export default function FlightSearchForm() {
                     border: '1px solid #f1f5f9',
                     maxHeight: '300px',
                     overflow: 'auto',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -437,71 +459,72 @@ export default function FlightSearchForm() {
                     }
                   }}
                 />
-                {isDateOpen && (
+                <Popper
+                  open={isDateOpen}
+                  anchorEl={departureAnchor}
+                  placement="bottom-start"
+                  sx={{ zIndex: 100 }}
+                >
                   <ClickAwayListener onClickAway={handleDateClose}>
-                        <Paper
-                          sx={{ 
-                            position: "absolute",
-                            top: "100%",
-                            left: 0,
-                            right: 0,
-                            maxWidth: '280px',
-                            mt: 0.5, 
-                            borderRadius: '12px', 
-                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
-                            border: '1px solid #f1f5f9',
-                            zIndex: 1300,
-                            overflow: 'hidden',
-                          }} 
-                        >
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DateCalendar 
-                          value={formData.departureDate} 
-                          onChange={handleDateChange} 
-                          disablePast 
-                          sx={{ 
-                            width: '100%', 
+                      <Paper
+                        sx={{ 
+                          mt: 0.5,
+                          maxWidth: '280px',
+                          borderRadius: '12px', 
+                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+                          border: '1px solid #f1f5f9',
+                          bgcolor: 'background.paper',
+                          overflow: 'hidden',
+                        }} 
+                      >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DateCalendar 
+                        value={formData.departureDate} 
+                        onChange={handleDateChange} 
+                        disablePast 
+                        sx={{ 
+                          width: '100%', 
+                          maxHeight: '260px',
+                          '& .MuiDateCalendar-root': {
+                            width: '100%',
+                            minWidth: '100%',
+                            height: '260px',
                             maxHeight: '260px',
-                            '& .MuiDateCalendar-root': {
-                              width: '100%',
-                              minWidth: '100%',
-                              height: '260px',
-                              maxHeight: '260px',
+                          },
+                          '& .MuiDayCalendar-monthContainer': {
+                            minHeight: 'auto',
+                          },
+                          '& .MuiPickersCalendarHeader-root': {
+                            px: 1,
+                            mt: 0.5,
+                            mb: 0,
+                            minHeight: '40px',
+                          },
+                          '& .MuiPickersDay-root.Mui-selected': {
+                            backgroundColor: '#0058E6',
+                            borderRadius: '50%',
+                            width: '32px',
+                            height: '32px',
+                            minWidth: '32px',
+                            '&:hover': {
+                              backgroundColor: '#0047b3',
                             },
-                            '& .MuiDayCalendar-monthContainer': {
-                              minHeight: 'auto',
-                            },
-                            '& .MuiPickersCalendarHeader-root': {
-                              px: 1,
-                              mt: 0.5,
-                              mb: 0,
-                              minHeight: '40px',
-                            },
-                            '& .MuiPickersDay-root.Mui-selected': {
-                              backgroundColor: '#0058E6',
-                              borderRadius: '50%',
-                              width: '32px',
-                              height: '32px',
-                              minWidth: '32px',
-                              '&:hover': {
-                                backgroundColor: '#0047b3',
-                              },
-                            },
-                            '& .MuiPickersDay-root': {
-                              borderRadius: '50%',
-                              width: '32px',
-                              height: '32px',
-                              minWidth: '32px',
-                            },
-                            '& .MuiPickersDay-today': {
-                              borderColor: '#0058E6',
-                            },
-                          }} 
-                        />
-                      </LocalizationProvider>
-                    </Paper>
-                  </ClickAwayListener>
-                )}
+                          },
+                          '& .MuiPickersDay-root': {
+                            borderRadius: '50%',
+                            width: '32px',
+                            height: '32px',
+                            minWidth: '32px',
+                          },
+                          '& .MuiPickersDay-today': {
+                            borderColor: '#0058E6',
+                          },
+                        }} 
+                      />
+                    </LocalizationProvider>
+                  </Paper>
+                </ClickAwayListener>
+              </Popper>
               </Box>
             </Box>
 
@@ -514,6 +537,7 @@ export default function FlightSearchForm() {
                 <Box>
                   <TextField
                     fullWidth
+                    inputRef={returnDateInputRef}
                     value={formData.returnDate.format('DD-MM-YYYY')}
                     onClick={handleReturnDateClick}
                     readOnly
@@ -534,19 +558,21 @@ export default function FlightSearchForm() {
                       }
                     }}
                   />
-                  {isReturnDateOpen && (
+                  <Popper
+                    open={isReturnDateOpen}
+                    anchorEl={returnAnchor}
+                    placement="bottom-end"
+                    sx={{ zIndex: 100 }}
+                  >
                     <ClickAwayListener onClickAway={handleReturnDateClose}>
                       <Paper
                         sx={{ 
-                          position: "absolute",
-                          top: "100%",
-                          right: 0,
+                          mt: 0.5,
                           maxWidth: '280px',
-                          mt: 0.5, 
                           borderRadius: '12px', 
                           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                           border: '1px solid #f1f5f9',
-                          zIndex: 1300,
+                          bgcolor: 'background.paper',
                           overflow: 'hidden',
                         }} 
                       >
@@ -598,7 +624,7 @@ export default function FlightSearchForm() {
                         </LocalizationProvider>
                       </Paper>
                     </ClickAwayListener>
-                  )}
+                  </Popper>
                 </Box>
               </Box>
             )}
@@ -626,10 +652,11 @@ export default function FlightSearchForm() {
                       <InputAdornment position="end">
                         <ExpandMoreOutlinedIcon sx={{ 
                           color: '#020817', 
-                          fontSize: '18px',
+                          fontSize: '14px',
                           transition: 'transform 0.2s', 
                           transform: isTypeOpen ? 'rotate(180deg)' : 'none' 
                         }} />
+
                       </InputAdornment>
                     ),
                   }}
@@ -658,7 +685,7 @@ export default function FlightSearchForm() {
                         borderRadius: '12px',
                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                         border: '1px solid #f1f5f9',
-                        zIndex: 1300,
+                        zIndex: 100,
                       }}
                     >
                       <List sx={{ py: 0 }}>
@@ -704,10 +731,11 @@ export default function FlightSearchForm() {
                       <InputAdornment position="end">
                         <ExpandMoreOutlinedIcon sx={{ 
                           color: '#020817', 
-                          fontSize: '18px',
+                          fontSize: '14px',
                           transition: 'transform 0.2s', 
                           transform: isClassOpen ? 'rotate(180deg)' : 'none' 
                         }} />
+
                       </InputAdornment>
                     ),
                   }}
@@ -736,7 +764,7 @@ export default function FlightSearchForm() {
                         borderRadius: '12px',
                         boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                         border: '1px solid #f1f5f9',
-                        zIndex: 1300,
+                        zIndex: 100,
                         minWidth: '150px'
                       }}
                     >
@@ -785,10 +813,11 @@ export default function FlightSearchForm() {
                   <InputAdornment position="end">
                     <ExpandMoreOutlinedIcon sx={{ 
                       color: '#020817', 
-                      fontSize: '18px',
+                      fontSize: '14px',
                       transition: 'transform 0.2s', 
                       transform: isPassengersOpen ? 'rotate(180deg)' : 'none' 
                     }} />
+
                   </InputAdornment>
                 ),
               }}
@@ -818,7 +847,7 @@ export default function FlightSearchForm() {
                     borderRadius: '12px',
                     boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
                     border: '1px solid #f1f5f9',
-                    zIndex: 1300,
+                    zIndex: 100,
                     minWidth: '280px',
                   }}
                 >
@@ -898,5 +927,6 @@ export default function FlightSearchForm() {
 
       </Grid>
     </Box>
+  </>
   );
 }

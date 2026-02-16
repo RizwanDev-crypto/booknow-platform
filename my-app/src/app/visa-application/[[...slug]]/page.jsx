@@ -101,14 +101,16 @@ function VisaApplicationContent({ slug = [] }) {
   }, []);
 
   useEffect(() => {
-    setTravelerDetails(Array(travelers).fill().map(() => ({
-      firstName: '',
-      lastName: '',
-      passportNumber: '',
-      nationality: from !== 'Origin' ? from : '',
-      passportExpiry: { day: 'Day', month: 'Month', year: 'Year' },
-      dob: { day: 'Day', month: 'Month', year: 'Year' },
-    })));
+    setTimeout(() => {
+      setTravelerDetails(Array(travelers).fill().map(() => ({
+        firstName: '',
+        lastName: '',
+        passportNumber: '',
+        nationality: from !== 'Origin' ? from : '',
+        passportExpiry: { day: 'Day', month: 'Month', year: 'Year' },
+        dob: { day: 'Day', month: 'Month', year: 'Year' },
+      })));
+    }, 0);
   }, [travelers, from]);
 
   const toggleDropdown = (id) => {
@@ -492,8 +494,8 @@ function VisaApplicationContent({ slug = [] }) {
                           control={<Checkbox sx={{ color: '#E2E8F0', '&.Mui-checked': { color: '#0058E6' } }} />}
                           label={
                             <Box>
-                              <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#1E293B' }}>I'm booking for someone else!</Typography>
-                              <Typography sx={{ fontSize: '12px', color: '#64748B' }}>Fill in the traveler's details below if you are booking on behalf of someone else.</Typography>
+                            <Typography sx={{ fontSize: '14px', fontWeight: 600, color: '#1E293B' }}>I&apos;m booking for someone else!</Typography>
+                            <Typography sx={{ fontSize: '12px', color: '#64748B' }}>Fill in the traveler&apos;s details below if you are booking on behalf of someone else.</Typography>
                             </Box>
                           }
                         />

@@ -58,7 +58,7 @@ export const hotels = [
       "Valet Parking",
       "Concierge Service"
     ],
-    description: "Grand Plaza Hotel is a premium luxury destination located in the heartbeat of Manhattan. Offering unparalleled views of the city skyline, each room is designed with sophistication and comfort in mind. Our world-class spa and fitness center provide a sanctuary from the urban hustle. Enjoy gourmet cuisine at our Michelin-starred restaurant or relax with a cocktail at the rooftop bar. Ideal for both business and leisure travelers, we ensure every stay is memorable with our personalized concierge services.",
+    description: "Take in the views from a rooftop terrace and a garden and make use of amenities such as complimentary wireless internet access. Additional features at this hotel include wedding services, a fireplace in the lobby, and barbecue grills. Satisfy your appetite for lunch or dinner at the hotel's restaurant, Steakhouse 1756, or stay in and take advantage of the room service (during limited hours). Wrap up your day with a drink at the bar/lounge. Full breakfasts are available daily for a fee. Featured amenities include express check-out, dry cleaning/laundry services, and a 24-hour front desk. Free self parking is available onsite. Stay in one of 40 guestrooms featuring Smart televisions. Complimentary wireless internet access keeps you connected, and cable programming is available for your entertainment. Private bathrooms with shower/tub combinations feature complimentary toiletries and hair dryers. Conveniences include safes and desks, and housekeeping is provided daily",
     badge: "Luxury"
   },
   {
@@ -86,7 +86,7 @@ export const hotels = [
       "Yoga Studio",
       "Private Cinema"
     ],
-    description: "Experience the ultimate coastal retreat at Seaside Villa Resort. Nestled on the pristine shores of Malibu, our villas offer direct beach access and breathtaking sunset views. Each villa is a masterpiece of modern architecture, featuring expansive living spaces, private pools, and state-of-the-art entertainment systems. Our dedicated staff is committed to providing a bespoke experience, from arranging private surf lessons to organizing intimate candlelit dinners on the beach.",
+    description: "Take in the views from a rooftop terrace and a garden and make use of amenities such as complimentary wireless internet access. Additional features at this hotel include wedding services, a fireplace in the lobby, and barbecue grills. Satisfy your appetite for lunch or dinner at the hotel's restaurant, Steakhouse 1756, or stay in and take advantage of the room service (during limited hours). Wrap up your day with a drink at the bar/lounge. Full breakfasts are available daily for a fee. Featured amenities include express check-out, dry cleaning/laundry services, and a 24-hour front desk. Free self parking is available onsite. Stay in one of 40 guestrooms featuring Smart televisions. Complimentary wireless internet access keeps you connected, and cable programming is available for your entertainment. Private bathrooms with shower/tub combinations feature complimentary toiletries and hair dryers. Conveniences include safes and desks, and housekeeping is provided daily.",
     badge: null
   },
   {
@@ -143,7 +143,7 @@ export const hotels = [
       "Ski Storage",
       "Game Room"
     ],
-    description: "Escape to the serene beauty of the Rockies at Mountain Chalet. This cozy timber dwelling offers a warm and inviting atmosphere, perfect for a winter getaway. After a day on the slopes, relax by the roaring fireplace or soak in the outdoor hot tub under the stars. With modern kitchen facilities and spacious bedrooms, it's the ideal home base for families and groups looking for an authentic mountain experience.",
+    description: "Take in the views from a rooftop terrace and a garden and make use of amenities such as complimentary wireless internet access. Additional features at this hotel include wedding services, a fireplace in the lobby, and barbecue grills. Satisfy your appetite for lunch or dinner at the hotel's restaurant, Steakhouse 1756, or stay in and take advantage of the room service (during limited hours). Wrap up your day with a drink at the bar/lounge. Full breakfasts are available daily for a fee. Featured amenities include express check-out, dry cleaning/laundry services, and a 24-hour front desk. Free self parking is available onsite. Stay in one of 40 guestrooms featuring Smart televisions. Complimentary wireless internet access keeps you connected, and cable programming is available for your entertainment. Private bathrooms with shower/tub combinations feature complimentary toiletries and hair dryers. Conveniences include safes and desks, and housekeeping is provided daily",
     badge: "Hot Deal"
   },
   {
@@ -169,7 +169,7 @@ export const hotels = [
       "Tour Desk",
       "Library"
     ],
-    description: "Discover the charm of London at our City Center Guest House. Located in a historic building, we offer a unique blend of traditional English hospitality and modern convenience. Our rooms are tastefully decorated to reflect the local heritage, providing a quiet oasis in the heart of the bustling city. Our knowledgeable hosts are always on hand to provide local tips and ensure you make the most of your London adventure.",
+    description: "Take in the views from a rooftop terrace and a garden and make use of amenities such as complimentary wireless internet access. Additional features at this hotel include wedding services, a fireplace in the lobby, and barbecue grills. Satisfy your appetite for lunch or dinner at the hotel's restaurant, Steakhouse 1756, or stay in and take advantage of the room service (during limited hours). Wrap up your day with a drink at the bar/lounge. Full breakfasts are available daily for a fee. Featured amenities include express check-out, dry cleaning/laundry services, and a 24-hour front desk. Free self parking is available onsite. Stay in one of 40 guestrooms featuring Smart televisions. Complimentary wireless internet access keeps you connected, and cable programming is available for your entertainment. Private bathrooms with shower/tub combinations feature complimentary toiletries and hair dryers. Conveniences include safes and desks, and housekeeping is provided daily",
     badge: null
   },
   {

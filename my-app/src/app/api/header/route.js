@@ -1,5 +1,23 @@
 import { NextResponse } from 'next/server';
-import headerData from '@/data/headerData.json';
+
+const headerData = {
+  "languages": [
+    "English",
+    "Arabic",
+    "Turkish",
+    "Russian",
+    "French",
+    "Chinese",
+    "Germany"
+  ],
+  "currencies": [
+    { "code": "USD", "name": "United States" },
+    { "code": "GBP", "name": "United Kingdom" },
+    { "code": "SAR", "name": "Saudi Arabia" },
+    { "code": "EUR", "name": "European Union" },
+    { "code": "NGN", "name": "Nigeria" }
+  ]
+};
 
 export async function GET() {
   try {

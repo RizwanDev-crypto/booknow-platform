@@ -145,7 +145,7 @@ export default function CarFilters({
            <FormControlLabel 
             value="SUV's" 
             control={<Radio size="small" sx={{ color: "#023669", "&.Mui-checked": { color: "#023669" } }} />} 
-            label={<Typography sx={{ fontSize: "14px", color: "#023669", fontWeight: 500 }}>SUV's</Typography>} 
+            label={<Typography sx={{ fontSize: "14px", color: "#023669", fontWeight: 500 }}>SUV&apos;s</Typography>} 
           />
         </RadioGroup>
       </FilterSection>

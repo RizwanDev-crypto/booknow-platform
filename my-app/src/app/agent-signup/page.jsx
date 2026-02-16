@@ -48,7 +48,7 @@ export default function AgentSignupPage() {
   useEffect(() => {
     const n1 = Math.floor(Math.random() * 10);
     const n2 = Math.floor(Math.random() * 10);
-    setCaptcha({ q: `${n1} x ${n2}`, a: n1 * n2 });
+    setTimeout(() => setCaptcha({ q: `${n1} x ${n2}`, a: n1 * n2 }), 0);
   }, []);
 
   const handlePasswordChange = (password) => {

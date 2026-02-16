@@ -55,14 +55,17 @@ export default function TourDetailsPage() {
   const tour = tours.find(t => t.id === tourId);
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isDateOpen, setIsDateOpen] = useState(false);
   const [startDate, setStartDate] = useState(dayjs());
+  const [isDateOpen, setIsDateOpen] = useState(false);
+  const [dateAnchor, setDateAnchor] = useState(null);
   const dateInputRef = useRef(null);
 
   const [adultsCount, setAdultsCount] = useState(1);
-  const [childrenCount, setChildrenCount] = useState(0);
   const [isAdultsOpen, setIsAdultsOpen] = useState(false);
+  const [childrenCount, setChildrenCount] = useState(0);
   const [isChildrenOpen, setIsChildrenOpen] = useState(false);
+  const [adultsAnchor, setAdultsAnchor] = useState(null);
+  const [childrenAnchor, setChildrenAnchor] = useState(null);
   const adultsRef = useRef(null);
   const childrenRef = useRef(null);
   
@@ -258,7 +261,7 @@ export default function TourDetailsPage() {
               <Box sx={{ p: 3, border: '1px solid #E2E8F0', borderRadius: 3, mb: 4 }}>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: '1rem' }}>What's Included</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: '1rem' }}>What&apos;s Included</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
                         <CheckCircleIcon sx={{ color: '#10b981', fontSize: 20, mt: 0.2 }} />
@@ -269,7 +272,7 @@ export default function TourDetailsPage() {
                     </Box>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: '1rem' }}>What's Excluded</Typography>
+                    <Typography variant="h6" sx={{ fontWeight: 700, mb: 2, fontSize: '1rem' }}>What&apos;s Excluded</Typography>
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
                       {tour.exclusions?.map((item, idx) => (
                         <Box key={idx} sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
@@ -328,7 +331,10 @@ export default function TourDetailsPage() {
                   fullWidth
                   inputRef={dateInputRef}
                   value={startDate.format('DD-MM-YYYY')}
-                  onClick={() => setIsDateOpen(true)}
+                  onClick={(e) => {
+                    setDateAnchor(e.currentTarget);
+                    setIsDateOpen(true);
+                  }}
                   readOnly
                   variant="outlined"
                   size="small"
@@ -355,9 +361,9 @@ export default function TourDetailsPage() {
 
                 <Popper
                   open={isDateOpen}
-                  anchorEl={dateInputRef.current}
+                  anchorEl={dateAnchor}
                   placement="bottom-start"
-                  sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+                  sx={{ zIndex: 1500, width: dateAnchor?.offsetWidth }}
                 >
                   <ClickAwayListener onClickAway={() => setIsDateOpen(false)}>
                         <Paper
@@ -427,7 +433,10 @@ export default function TourDetailsPage() {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     ref={adultsRef}
-                    onClick={() => setIsAdultsOpen(!isAdultsOpen)}
+                    onClick={(e) => {
+                      setAdultsAnchor(e.currentTarget);
+                      setIsAdultsOpen(!isAdultsOpen);
+                    }}
                     sx={{
                       width: '100px',
                       height: '38px',
@@ -448,7 +457,7 @@ export default function TourDetailsPage() {
                   </Box>
                   <Popper
                     open={isAdultsOpen}
-                    anchorEl={adultsRef.current}
+                    anchorEl={adultsAnchor}
                     placement="bottom-end"
                     sx={{ zIndex: 1500 }}
                   >
@@ -491,7 +500,10 @@ export default function TourDetailsPage() {
                 <Box sx={{ position: 'relative' }}>
                   <Box
                     ref={childrenRef}
-                    onClick={() => setIsChildrenOpen(!isChildrenOpen)}
+                    onClick={(e) => {
+                      setChildrenAnchor(e.currentTarget);
+                      setIsChildrenOpen(!isChildrenOpen);
+                    }}
                     sx={{
                       width: '100px',
                       height: '38px',
@@ -512,7 +524,7 @@ export default function TourDetailsPage() {
                   </Box>
                   <Popper
                     open={isChildrenOpen}
-                    anchorEl={childrenRef.current}
+                    anchorEl={childrenAnchor}
                     placement="bottom-end"
                     sx={{ zIndex: 1500 }}
                   >

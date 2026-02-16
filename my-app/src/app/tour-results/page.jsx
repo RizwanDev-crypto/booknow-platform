@@ -48,13 +48,14 @@ export default function TourResults() {
   };
 
   // Reset pagination when filters or sort change
-  useEffect(() => {
+  const handleFilterChange = (setter, value) => {
+    setter(value);
     setVisibleToursCount(7);
-  }, [tourNameFilter, priceRange, selectedRatings, selectedInclusions, selectedExclusions, sortLabel]);
+  };
 
   // Load data from localStorage on component mount
   useEffect(() => {
-    setIsMounted(true);
+    setTimeout(() => setIsMounted(true), 0);
     
     const savedData = localStorage.getItem('tourSearchData');
     if (savedData) {
@@ -189,15 +190,15 @@ export default function TourResults() {
           <TourFilters 
             tourCount={filteredTours.length}
             tourNameFilter={tourNameFilter}
-            onTourNameChange={setTourNameFilter}
+            onTourNameChange={(val) => handleFilterChange(setTourNameFilter, val)}
             priceRange={priceRange}
-            onPriceChange={setPriceRange}
+            onPriceChange={(val) => handleFilterChange(setPriceRange, val)}
             selectedRatings={selectedRatings}
-            onRatingsChange={setSelectedRatings}
+            onRatingsChange={(val) => handleFilterChange(setSelectedRatings, val)}
             selectedInclusions={selectedInclusions}
-            onInclusionsChange={setSelectedInclusions}
+            onInclusionsChange={(val) => handleFilterChange(setSelectedInclusions, val)}
             selectedExclusions={selectedExclusions}
-            onExclusionsChange={setSelectedExclusions}
+            onExclusionsChange={(val) => handleFilterChange(setSelectedExclusions, val)}
             ratingCounts={ratingCounts}
             inclusionCounts={inclusionCounts}
             exclusionCounts={exclusionCounts}
@@ -221,7 +222,7 @@ export default function TourResults() {
                 {filteredTours.length} {filteredTours.length === 1 ? 'Tour' : 'Tours'}
                 {tourNameFilter && (
                   <Box component="span" sx={{ fontWeight: 400, color: '#6B7280', fontSize: '14px', ml: 1 }}>
-                    for "{tourNameFilter}"
+                    for &quot;{tourNameFilter}&quot;
                   </Box>
                 )}
               </Typography>
@@ -284,8 +285,8 @@ export default function TourResults() {
                   }
                 }}
               >
-                <MenuItem onClick={() => handleSortClose("Price: Low to High")}>Price: Low to High</MenuItem>
-                <MenuItem onClick={() => handleSortClose("Price: High to Low")}>Price: High to Low</MenuItem>
+                <MenuItem onClick={() => { handleSortClose("Price: Low to High"); setVisibleToursCount(7); }}>Price: Low to High</MenuItem>
+                <MenuItem onClick={() => { handleSortClose("Price: High to Low"); setVisibleToursCount(7); }}>Price: High to Low</MenuItem>
               </Menu>
             </Box>
           </Box>
@@ -327,7 +328,7 @@ export default function TourResults() {
             {filteredTours.length === 0 && (
               <Paper sx={{ p: 4, textAlign: "center", borderRadius: 2, width: "100%", ml: { xs: 0, md: 2 } }}>
                 <Typography variant="h6" color="textSecondary" sx={{ mb: 2 }}>
-                  No tours found matching your search "{tourNameFilter}".
+                  No tours found matching your search &quot;{tourNameFilter}&quot;.
                 </Typography>
                 <Button 
                   variant="contained" 

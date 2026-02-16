@@ -38,9 +38,9 @@ export default function HotelDetailsGallery({ images, hotelName }) {
 
   return (
     <Box sx={{ width: '100%', mb: 4, borderRadius: 3, overflow: 'hidden' }}>
-      <Grid container spacing={1.5}>
+      <Grid container spacing={{xs:1, sm:1, md:2, lg:2.5}}>
         {/* Main Image (Left) */}
-        <Grid item xs={12} md={10}>
+        <Grid item xs={12} md={10} width={{xs:400, sm:460, md:'60%' , lg:'68%' }}>
           <Box
             component="img"
             src={images[mainImageIndex]}
@@ -57,7 +57,7 @@ export default function HotelDetailsGallery({ images, hotelName }) {
         </Grid>
 
         {/* Side Images (Right - Column stack) */}
-        <Grid item xs={12} md={2} width={323}>
+        <Grid item xs={12} md={2} width={{xs:400, sm:205, md:348 , lg:'30%' }}>
           <Box sx={{ height: { xs: 'auto', md: 500 }, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
             {sideImageIndices.map((imgIdx, index) => (
               <Box 

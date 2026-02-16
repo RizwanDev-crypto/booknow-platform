@@ -38,6 +38,10 @@ import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined';
 import OutlinedFlagOutlinedIcon from '@mui/icons-material/OutlinedFlagOutlined';
 
+import nationalitiesData from '@/data/nationalities.json';
+
+// ... (imports)
+
 export default function HotelSearchForm() {
   const [formData, setFormData] = React.useState({
     destination: '',
@@ -49,13 +53,20 @@ export default function HotelSearchForm() {
     nationalitySearch: '',
   });
 
-  const [nationalities, setNationalities] = React.useState([]);
+  // Removed isLoading and error states as data is static
+  const [nationalities, setNationalities] = React.useState(nationalitiesData);
   const [isDestinationOpen, setIsDestinationOpen] = React.useState(false);
   const [isCheckInOpen, setIsCheckInOpen] = React.useState(false);
   const [isCheckOutOpen, setIsCheckOutOpen] = React.useState(false);
   const [isGuestsOpen, setIsGuestsOpen] = React.useState(false);
   const [isNationalityOpen, setIsNationalityOpen] = React.useState(false);
   const [isAgeSelectOpen, setIsAgeSelectOpen] = React.useState(false);
+  const [checkInAnchor, setCheckInAnchor] = React.useState(null);
+  const [checkOutAnchor, setCheckOutAnchor] = React.useState(null);
+  const [errors, setErrors] = React.useState({
+    destination: false,
+    nationality: false
+  });
 
   const destinationInputRef = React.useRef(null);
   const checkInInputRef = React.useRef(null);
@@ -63,18 +74,7 @@ export default function HotelSearchForm() {
   const guestsInputRef = React.useRef(null);
   const nationalityInputRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const fetchNationalities = async () => {
-      try {
-        const response = await fetch('/api/nationalities');
-        const data = await response.json();
-        setNationalities(data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchNationalities();
-  }, []);
+  // Removed useEffect for fetching nationalities
 
   const handleDestinationSelect = (country) => {
     setFormData(prev => ({ 
@@ -82,11 +82,16 @@ export default function HotelSearchForm() {
       destination: country.name,
       destinationSearch: country.name 
     }));
+    setErrors(prev => ({ ...prev, destination: false }));
     setIsDestinationOpen(false);
+    setCheckInAnchor(checkInInputRef.current);
     setTimeout(() => setIsCheckInOpen(true), 100);
   };
 
-  const handleCheckInClick = () => setIsCheckInOpen(!isCheckInOpen);
+  const handleCheckInClick = (event) => {
+    setCheckInAnchor(event.currentTarget);
+    setIsCheckInOpen(!isCheckInOpen);
+  };
   const handleCheckInClose = () => setIsCheckInOpen(false);
   const handleCheckInChange = (newDate) => {
     setFormData(prev => ({ 
@@ -97,10 +102,14 @@ export default function HotelSearchForm() {
         : prev.checkOutDate
     }));
     setIsCheckInOpen(false);
+    setCheckOutAnchor(checkOutInputRef.current);
     setTimeout(() => setIsCheckOutOpen(true), 100);
   };
 
-  const handleCheckOutClick = () => setIsCheckOutOpen(!isCheckOutOpen);
+  const handleCheckOutClick = (event) => {
+    setCheckOutAnchor(event.currentTarget);
+    setIsCheckOutOpen(!isCheckOutOpen);
+  };
   const handleCheckOutClose = () => setIsCheckOutOpen(false);
   const handleCheckOutChange = (newDate) => {
     setFormData(prev => ({ ...prev, checkOutDate: newDate }));
@@ -178,7 +187,33 @@ export default function HotelSearchForm() {
       nationality: country.name,
       nationalitySearch: country.name 
     }));
+    setErrors(prev => ({ ...prev, nationality: false }));
     setIsNationalityOpen(false);
+  };
+
+  const handleSearch = () => {
+    const newErrors = {
+      destination: !formData.destination,
+      nationality: !formData.nationality
+    };
+
+    if (newErrors.destination || newErrors.nationality) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Save search data to localStorage
+    const searchData = {
+      destination: formData.destination,
+      checkInDate: formData.checkInDate.format('YYYY-MM-DD'),
+      checkOutDate: formData.checkOutDate.format('YYYY-MM-DD'),
+      rooms: formData.rooms,
+      nationality: formData.nationality,
+    };
+    localStorage.setItem('hotelSearchData', JSON.stringify(searchData));
+    
+    // Navigate to hotel results page
+    window.location.href = '/hotel-results';
   };
 
   const filteredDestinations = nationalities.filter(country =>
@@ -229,7 +264,7 @@ export default function HotelSearchForm() {
             handleCheckOutClose();
           }}
           sx={{ 
-            zIndex: 1400,
+            zIndex: 99,
             backgroundColor: 'rgba(0, 0, 0, 0.3)',
           }}
         />
@@ -249,10 +284,13 @@ export default function HotelSearchForm() {
               placeholder="Search By City"
               variant="outlined"
               size="small"
+              error={errors.destination}
+              helperText={errors.destination ? "Please select destination" : ""}
               value={formData.destinationSearch}
               onChange={(e) => {
                 const val = e.target.value;
                 setFormData(prev => ({ ...prev, destinationSearch: val }));
+                if (errors.destination) setErrors(prev => ({ ...prev, destination: false }));
                 if (!isDestinationOpen) setIsDestinationOpen(true);
               }}
               onClick={() => setIsDestinationOpen(!isDestinationOpen)}
@@ -295,7 +333,7 @@ export default function HotelSearchForm() {
                     border: '1px solid #f1f5f9',
                     maxHeight: '300px',
                     overflow: 'auto',
-                    zIndex: 1300,
+                    zIndex: 100,
                   }}
                 >
                   <List sx={{ py: 0 }}>
@@ -358,9 +396,9 @@ export default function HotelSearchForm() {
             />
             <Popper
               open={isCheckInOpen}
-              anchorEl={checkInInputRef.current}
+              anchorEl={checkInAnchor}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: checkInInputRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: checkInAnchor?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={handleCheckInClose}>
                 <Paper
@@ -383,6 +421,7 @@ export default function HotelSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -454,9 +493,9 @@ export default function HotelSearchForm() {
             />
             <Popper
               open={isCheckOutOpen}
-              anchorEl={checkOutInputRef.current}
+              anchorEl={checkOutAnchor}
               placement="bottom-start"
-              sx={{ zIndex: 1500, width: checkOutInputRef.current?.offsetWidth }}
+              sx={{ zIndex: 100, width: { xs: checkOutAnchor?.offsetWidth, md: '280px' } }}
             >
               <ClickAwayListener onClickAway={handleCheckOutClose}>
                 <Paper
@@ -480,6 +519,7 @@ export default function HotelSearchForm() {
                         maxHeight: '260px',
                         '& .MuiDateCalendar-root': {
                           width: '100%',
+                          minWidth: '100%',
                           height: '260px',
                           maxHeight: '260px',
                         },
@@ -694,8 +734,8 @@ export default function HotelSearchForm() {
                             </Typography>
                             <Grid container spacing={1}>
                               {room.childAges.map((age, childIndex) => (
-                                <Grid item xs={12} key={childIndex} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 6, mb: 1 }}>
-                                  <Typography sx={{ fontSize: '12px', color: '#64748b' }}>
+                                <Grid item xs={12} key={childIndex} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 5, mb: 1 }}>
+                                  <Typography sx={{ fontSize: '12px', color: '#64748b', whiteSpace: 'nowrap' }}>
                                     Child {childIndex + 1}:
                                   </Typography>
                                   <Select
@@ -734,7 +774,7 @@ export default function HotelSearchForm() {
                                       '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#cbd5e1' },
                                       '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#0058e6' },
                                       '& .MuiSelect-icon': {
-                                        fontSize: '18px',
+                                        fontSize: '14px',
                                         color: '#020817',
                                         right: '4px'
                                       }
@@ -776,10 +816,13 @@ export default function HotelSearchForm() {
               placeholder="Select Nationality"
               variant="outlined"
               size="small"
+              error={errors.nationality}
+              helperText={errors.nationality ? "Please select nationality" : ""}
               value={formData.nationalitySearch}
               onChange={(e) => {
                 const val = e.target.value;
                 setFormData(prev => ({ ...prev, nationalitySearch: val }));
+                if (errors.nationality) setErrors(prev => ({ ...prev, nationality: false }));
                 if (!isNationalityOpen) setIsNationalityOpen(true);
               }}
               onClick={handleNationalityClick}
@@ -844,25 +887,12 @@ export default function HotelSearchForm() {
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'flex-end', width: { xs: '100%', md: '49.2%', lg: '48.5%' }, pl: { xs: 0, md: 0.5 }}}>
+        <Grid item xs={12} md={6} sx={{ display: 'flex', alignItems: 'flex-end', width: { xs: '100%', md: '49.2%', lg: '48.5%' }, pl: { xs: 0, md: 0.5 }, mb: (errors.destination || errors.nationality) ? 2.8 : 0 }}>
           <Button
             fullWidth
             variant="contained"
             startIcon={<SearchIcon />}
-            onClick={() => {
-              // Save search data to localStorage
-              const searchData = {
-                destination: formData.destination,
-                checkInDate: formData.checkInDate.format('YYYY-MM-DD'),
-                checkOutDate: formData.checkOutDate.format('YYYY-MM-DD'),
-                rooms: formData.rooms,
-                nationality: formData.nationality,
-              };
-              localStorage.setItem('hotelSearchData', JSON.stringify(searchData));
-              
-              // Navigate to hotel results page
-              window.location.href = '/hotel-results';
-            }}
+            onClick={handleSearch}
             sx={{
               height: 38,
               borderRadius: '8px',

@@ -151,7 +151,7 @@ export default function FlightBookingForm({
         dob: { day: 'Day', month: 'Month', year: 'Year' },
       });
     }
-    setTravelerDetails(details);
+    setTimeout(() => setTravelerDetails(details), 0);
   }, [adults, childrenCount, infants]);
 
   const toggleDropdown = (id) => {

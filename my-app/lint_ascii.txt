@@ -1,0 +1,381 @@
+
+> my-app@0.1.0 lint
+> eslint
+
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\agent-signup\page.jsx
+  51:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  49 |     const n1 = Math.floor(Math.random() * 10);
+  50 |     const n2 = Math.floor(Math.random() * 10);
+> 51 |     setCaptcha({ q: `${n1} x ${n2}`, a: n1 * n2 });
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  52 |   }, []);
+  53 |
+  54 |   const handlePasswordChange = (password) => {  react-hooks/set-state-in-effect
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\car-booking\page.jsx
+   57:7    error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  55 |     
+  56 |     if (carData) {
+> 57 |       setSelectedCar(JSON.parse(carData));
+     |       ^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  58 |     }
+  59 |     if (searchParams) {
+  60 |       setSearchData(JSON.parse(searchParams));  react-hooks/set-state-in-effect
+  292:107  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\car-results\CarCard.jsx
+  61:9  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\car-results\page.jsx
+  49:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  47 |   // Load data from localStorage on component mount
+  48 |   useEffect(() => {
+> 49 |     setIsMounted(true);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  50 |     
+  51 |     const savedData = localStorage.getItem('carSearchData');
+  52 |     if (savedData) {  react-hooks/set-state-in-effect
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\flight-results\[[...slug]]\page.jsx
+  70:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  68 |   // ??? Load data from localStorage on component mount
+  69 |   useEffect(() => {
+> 70 |     setIsMounted(true); // Mark component as mounted
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  71 |     
+  72 |     const savedData = localStorage.getItem('flightSearchData');
+  73 |     if (savedData) {  react-hooks/set-state-in-effect
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\hotel-results\Checkout.jsx
+  286:103  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  287:105  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\hotel-results\HotelLocationPolicies.jsx
+  67:12  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\hotel-results\RoomSelection.jsx
+  261:15  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\hotel-results\page.jsx
+   49:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  47 |   // Reset pagination when filters or sort change
+  48 |   useEffect(() => {
+> 49 |     setVisibleHotelsCount(7);
+     |     ^^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  50 |   }, [hotelNameFilter, priceRange, selectedStarRatings, selectedAccommodationTypes, selectedAmenities, sortLabel]);
+  51 |
+  52 |   // Load data from localStorage on component mount  react-hooks/set-state-in-effect
+   54:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  52 |   // Load data from localStorage on component mount
+  53 |   useEffect(() => {
+> 54 |     setIsMounted(true);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  55 |     
+  56 |     const savedData = localStorage.getItem('hotelSearchData');
+  57 |     if (savedData) {                                                                                              react-hooks/set-state-in-effect
+  192:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+  192:43  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+  299:56  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+  299:74  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\signup\page.jsx
+  49:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  47 |     const n1 = Math.floor(Math.random() * 10);
+  48 |     const n2 = Math.floor(Math.random() * 10);
+> 49 |     setCaptcha({ q: `${n1} x ${n2}`, a: n1 * n2 });
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  50 |   }, []);
+  51 |
+  52 |   const handlePasswordChange = (password) => {  react-hooks/set-state-in-effect
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\tour-results\[id]\page.jsx
+  261:100  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/no-unescaped-entities
+  272:100  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/no-unescaped-entities
+  358:29   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  356 |                 <Popper
+  357 |                   open={isDateOpen}
+> 358 |                   anchorEl={dateInputRef.current}
+      |                             ^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  359 |                   placement="bottom-start"
+  360 |                   sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+  361 |                 >                                                                                    react-hooks/refs
+  360:23   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  358 |                   anchorEl={dateInputRef.current}
+  359 |                   placement="bottom-start"
+> 360 |                   sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+      |                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  361 |                 >
+  362 |                   <ClickAwayListener onClickAway={() => setIsDateOpen(false)}>
+  363 |                         <Paper  react-hooks/refs
+  360:46   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  358 |                   anchorEl={dateInputRef.current}
+  359 |                   placement="bottom-start"
+> 360 |                   sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+      |                                              ^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  361 |                 >
+  362 |                   <ClickAwayListener onClickAway={() => setIsDateOpen(false)}>
+  363 |                         <Paper                 react-hooks/refs
+  360:46   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  358 |                   anchorEl={dateInputRef.current}
+  359 |                   placement="bottom-start"
+> 360 |                   sx={{ zIndex: 1500, width: dateInputRef.current?.offsetWidth }}
+      |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  361 |                 >
+  362 |                   <ClickAwayListener onClickAway={() => setIsDateOpen(false)}>
+  363 |                         <Paper    react-hooks/refs
+  451:31   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  449 |                   <Popper
+  450 |                     open={isAdultsOpen}
+> 451 |                     anchorEl={adultsRef.current}
+      |                               ^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  452 |                     placement="bottom-end"
+  453 |                     sx={{ zIndex: 1500 }}
+  454 |                   >                                                                                                                      react-hooks/refs
+  515:31   error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  513 |                   <Popper
+  514 |                     open={isChildrenOpen}
+> 515 |                     anchorEl={childrenRef.current}
+      |                               ^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  516 |                     placement="bottom-end"
+  517 |                     sx={{ zIndex: 1500 }}
+  518 |                   >                                                                                                                react-hooks/refs
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\tour-results\page.jsx
+   52:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  50 |   // Reset pagination when filters or sort change
+  51 |   useEffect(() => {
+> 52 |     setVisibleToursCount(7);
+     |     ^^^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  53 |   }, [tourNameFilter, priceRange, selectedRatings, selectedInclusions, selectedExclusions, sortLabel]);
+  54 |
+  55 |   // Load data from localStorage on component mount  react-hooks/set-state-in-effect
+   57:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  55 |   // Load data from localStorage on component mount
+  56 |   useEffect(() => {
+> 57 |     setIsMounted(true);
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  58 |     
+  59 |     const savedData = localStorage.getItem('tourSearchData');
+  60 |     if (savedData) {                                                                                 react-hooks/set-state-in-effect
+  224:25  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react/no-unescaped-entities
+  224:42  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react/no-unescaped-entities
+  330:55  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react/no-unescaped-entities
+  330:72  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\app\visa-application\[[...slug]]\page.jsx
+  104:5    error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  102 |
+  103 |   useEffect(() => {
+> 104 |     setTravelerDetails(Array(travelers).fill().map(() => ({
+      |     ^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  105 |       firstName: '',
+  106 |       lastName: '',
+  107 |       passportNumber: '',  react-hooks/set-state-in-effect
+  495:105  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react/no-unescaped-entities
+  496:107  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\components\FlightBookingForm.jsx
+  154:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+  152 |       });
+  153 |     }
+> 154 |     setTravelerDetails(details);
+      |     ^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  155 |   }, [adults, childrenCount, infants]);
+  156 |
+  157 |   const toggleDropdown = (id) => {  react-hooks/set-state-in-effect
+
+F:\Next Js Projects\Booknow.co\my-app\src\components\Hero\FlightSearchForm.jsx
+  456:18  error  'Popper' is not defined  react/jsx-no-undef
+  555:20  error  'Popper' is not defined  react/jsx-no-undef
+
+F:\Next Js Projects\Booknow.co\my-app\src\components\Hero\Hero.jsx
+  66:16  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+F:\Next Js Projects\Booknow.co\my-app\src\components\Hero\HotelSearchForm.jsx
+  389:25  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  387 |             <Popper
+  388 |               open={isCheckInOpen}
+> 389 |               anchorEl={checkInInputRef.current}
+      |                         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  390 |               placement="bottom-start"
+  391 |               sx={{ zIndex: 100, width: checkInInputRef.current?.offsetWidth }}
+  392 |             >                                                                        react-hooks/refs
+  391:19  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  389 |               anchorEl={checkInInputRef.current}
+  390 |               placement="bottom-start"
+> 391 |               sx={{ zIndex: 100, width: checkInInputRef.current?.offsetWidth }}
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  392 |             >
+  393 |               <ClickAwayListener onClickAway={handleCheckInClose}>
+  394 |                 <Paper      react-hooks/refs
+  391:41  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  389 |               anchorEl={checkInInputRef.current}
+  390 |               placement="bottom-start"
+> 391 |               sx={{ zIndex: 100, width: checkInInputRef.current?.offsetWidth }}
+      |                                         ^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  392 |             >
+  393 |               <ClickAwayListener onClickAway={handleCheckInClose}>
+  394 |                 <Paper                     react-hooks/refs
+  391:41  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  389 |               anchorEl={checkInInputRef.current}
+  390 |               placement="bottom-start"
+> 391 |               sx={{ zIndex: 100, width: checkInInputRef.current?.offsetWidth }}
+      |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  392 |             >
+  393 |               <ClickAwayListener onClickAway={handleCheckInClose}>
+  394 |                 <Paper        react-hooks/refs
+  485:25  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  483 |             <Popper
+  484 |               open={isCheckOutOpen}
+> 485 |               anchorEl={checkOutInputRef.current}
+      |                         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  486 |               placement="bottom-start"
+  487 |               sx={{ zIndex: 100, width: checkOutInputRef.current?.offsetWidth }}
+  488 |             >                                                                    react-hooks/refs
+  487:19  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  485 |               anchorEl={checkOutInputRef.current}
+  486 |               placement="bottom-start"
+> 487 |               sx={{ zIndex: 100, width: checkOutInputRef.current?.offsetWidth }}
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  488 |             >
+  489 |               <ClickAwayListener onClickAway={handleCheckOutClose}>
+  490 |                 <Paper  react-hooks/refs
+  487:41  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  485 |               anchorEl={checkOutInputRef.current}
+  486 |               placement="bottom-start"
+> 487 |               sx={{ zIndex: 100, width: checkOutInputRef.current?.offsetWidth }}
+      |                                         ^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  488 |             >
+  489 |               <ClickAwayListener onClickAway={handleCheckOutClose}>
+  490 |                 <Paper                 react-hooks/refs
+  487:41  error  Error: Cannot access refs during render
+
+React refs are values that are not needed for rendering. Refs should only be accessed outside of render, such as in event handlers or effects. Accessing a ref value (the `current` property) during render can cause your component not to update as expected (https://react.dev/reference/react/useRef).
+
+  485 |               anchorEl={checkOutInputRef.current}
+  486 |               placement="bottom-start"
+> 487 |               sx={{ zIndex: 100, width: checkOutInputRef.current?.offsetWidth }}
+      |                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ Cannot access ref value during render
+  488 |             >
+  489 |               <ClickAwayListener onClickAway={handleCheckOutClose}>
+  490 |                 <Paper    react-hooks/refs
+
+??? 46 problems (43 errors, 3 warnings)
+

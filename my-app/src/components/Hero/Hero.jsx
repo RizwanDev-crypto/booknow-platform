@@ -63,7 +63,7 @@ export default function Hero() {
               textShadow: '0 1px 2px rgba(0,0,0,0.3)',
             }}
           >
-            Let's help you plan your next journey the one that will leave a lifetime of memories.
+            Let&apos;s help you plan your next journey the one that will leave a lifetime of memories.
           </Typography>
         </Box>
 
