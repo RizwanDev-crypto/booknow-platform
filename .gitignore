@@ -8,11 +8,11 @@ node_modules/
 !.yarn/releases
 !.yarn/versions
 
-# next.js (in my-app)
-my-app/.next/
-my-app/out/
-my-app/build/
-my-app/next-env.d.ts
+# next.js
+.next/
+out/
+build/
+next-env.d.ts
 
 # testing
 /coverage
